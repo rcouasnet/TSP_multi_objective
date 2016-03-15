@@ -50,7 +50,7 @@ bool Instance::tryLoadFile(const string& fileName){
 	
 	// Lecture de la première ligne renseignant nombre de lignes et nombre de colonnes
 	getline(f,line);
-	cout << line << end;
+	cout << line << endl;
 	
 	
 	vector<string>& tokens_line = explode(line);
@@ -71,12 +71,16 @@ bool Instance::tryLoadFile(const string& fileName){
 		 * tokens[1] : x
 		 * tokens[2] : y
                  */
-		// TODO CREER LECTURE LIGNE
+		int id= atoi(tokens[0].c_str());
+		int x= atoi(tokens[1].c_str());
+		int y= atoi(tokens[2].c_str());
+		cities_postions[id].col =x;
+		cities_postions[id].row= y;
             }
             
             delete(&tokens);
         }
-
+    }
 
     return true;
 

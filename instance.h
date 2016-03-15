@@ -8,11 +8,13 @@
 #include <cstdlib>
 #include <sstream>
 
+#include "coordinates.h"
+
 class Instance
 {
 private:
     int nb_cities;
-    
+    std::vector<Coordinates>	cities_postions;
    
 public:
     Instance();
