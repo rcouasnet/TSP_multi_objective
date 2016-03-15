@@ -32,6 +32,8 @@ public:
     { return instance.print(out); }
     
     bool tryLoadFile(const std::string& fileName);
+    
+    const Coordinates& get_city(int id) const;
 
 };
 

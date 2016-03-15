@@ -89,3 +89,11 @@ bool Instance::tryLoadFile(const string& fileName){
     return true;
 
 }
+
+const Coordinates& Instance::get_city(int id) const
+{
+    if (id <= nb_cities && id >0){
+	return cities_postions[id];
+    }
+    else return Coordinates(-1, -1);
+}
