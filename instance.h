@@ -12,13 +12,14 @@ class Instance
 {
 private:
     int nb_cities;
+    
    
 public:
-Instance();
-Instance(const Instance& other);
-Instance& operator=(const Instance& other);
+    Instance();
+    Instance(const Instance& other);
+    Instance& operator=(const Instance& other);
 
-bool tryLoadFile(const std::string& fileName);
+    bool tryLoadFile(const std::string& fileName);
 
 };
 
