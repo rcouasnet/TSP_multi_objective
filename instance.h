@@ -21,6 +21,10 @@ public:
     Instance(const Instance& other);
     Instance& operator=(const Instance& other);
 
+    int get_nbcities() const; 
+    
+    const Coordinates& get_city(unsigned int id) const;
+    
     /**
      * Impression sur un flux de l'instance
      * @param out
@@ -37,14 +41,18 @@ public:
      * @return true si le fichier est correctement chargé
      */
     bool tryLoadFile(const std::string& fileName);
-    
-    int get_nbcities() const; 
-    
-    const Coordinates& get_city(unsigned int id) const;
-    
-    void displayInstance();
-    
+    /**
+     * Calcule la distance entre 2 coordonnées
+     * @param A première coordonnée
+     * @param B seconde coordonnée
+     */
     float distance(Coordinates A, Coordinates B);
+    /**
+     * Calcule la distance entre 2 villes
+     * @param A première ville
+     * @param B seconde ville
+     */
+    float distance(int A, int B);
     
     std::vector< std::vector<float> > matriceDistance(Instance inst);
     

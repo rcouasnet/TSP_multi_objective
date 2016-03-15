@@ -122,6 +122,12 @@ float Instance::distance(Coordinates A, Coordinates B)
   return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
 
+float Instance::distance(int A, int B)
+{
+    return distance(cities_positions[A], cities_positions[B]);
+}
+
+
 /*vector<vector<float>> matriceDistance(Instance inst) {
 
 }*/
