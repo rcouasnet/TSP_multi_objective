@@ -41,7 +41,13 @@ public:
     int get_nbcities() const; 
     
     const Coordinates& get_city(unsigned int id) const;
-
+    
+    void displayInstance();
+    
+    float distance(Coordinates A, Coordinates B);
+    
+    std::vector< std::vector<float> > matriceDistance(Instance inst);
+    
 };
 
 #endif // INSTANCE_H

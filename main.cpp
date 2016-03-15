@@ -14,5 +14,11 @@ int main(int argc, char **argv) {
       cerr<< "Echec lecture" << endl;
   }
   
+  Coordinates A(4, 7);
+  Coordinates B(3, 1);
+
+  cout << "< ! Test ! > distance[A(4,7), B(3,1)] = " << i.distance(A, B) << " < ! Test ! >" << endl;
+ 
   return 0;
 }
+

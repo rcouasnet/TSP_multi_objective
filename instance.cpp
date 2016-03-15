@@ -1,4 +1,5 @@
 #include "instance.h"
+#include <math.h>
 
 using namespace std;
 
@@ -109,9 +110,19 @@ int Instance::get_nbcities() const
 
 ostream& Instance::print(ostream& out) const
 {
-    for(unsigned int i=0; i < nb_cities; ++i) {
+    for(unsigned int i=1; i <= nb_cities; ++i) {
        out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
     }
     
     return out;
 }
+ 
+float Instance::distance(Coordinates A, Coordinates B)
+{
+  return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
+}
+
+/*vector<vector<float>> matriceDistance(Instance inst) {
+
+}*/
+
