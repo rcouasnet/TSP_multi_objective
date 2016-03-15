@@ -59,6 +59,7 @@ bool Instance::tryLoadFile(const string& fileName){
 	 * tokens[1] : nombre de villes
 	 */
 	nb_cities= atoi(tokens_line[1].c_str());
+	cities_positions.reserve(nb_cities +1);
 	
 	delete(&tokens_line);
 	
@@ -74,8 +75,8 @@ bool Instance::tryLoadFile(const string& fileName){
 		int id= atoi(tokens[0].c_str());
 		int x= atoi(tokens[1].c_str());
 		int y= atoi(tokens[2].c_str());
-		cities_postions[id].col =x;
-		cities_postions[id].row= y;
+		cities_positions[id].col =x;
+		cities_positions[id].row= y;
             }
             
             delete(&tokens);
@@ -84,4 +85,12 @@ bool Instance::tryLoadFile(const string& fileName){
 
     return true;
 
+}
+
+void Instance::displayInstance()
+{
+    for(unsigned int i=0; i < nb_cities; ++i) {
+       cout << "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
+      
+    }
 }

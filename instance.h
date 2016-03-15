@@ -14,7 +14,7 @@ class Instance
 {
 private:
     int nb_cities;
-    std::vector<Coordinates>	cities_postions;
+    std::vector<Coordinates>	cities_positions;
    
 public:
     Instance();
@@ -22,6 +22,7 @@ public:
     Instance& operator=(const Instance& other);
 
     bool tryLoadFile(const std::string& fileName);
+    void displayInstance();
 
 };
 

@@ -1,6 +1,15 @@
 #include <iostream>
+#include "instance.h"
+
+using namespace std;
+
 
 int main(int argc, char **argv) {
-    std::cout << "Hello, world!" << std::endl;
-    return 0;
+  Instance i;
+  if (i.tryLoadFile("../data/kroA100.tsp")){
+    cout << "lecture réussie" << endl;
+    i.displayInstance();
+  }
+  
+  return 0;
 }
