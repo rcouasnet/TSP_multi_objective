@@ -18,14 +18,18 @@ Instance::Instance()
 
 }
 
-Instance::Instance(const Instance& other)
+Instance::Instance(const Instance& other):
+    nb_cities(other.nb_cities), cities_positions(other.cities_positions)
 {
 
 }
 
 Instance& Instance::operator=(const Instance& other)
 {
-
+    nb_cities=other.nb_cities;
+    cities_positions= other.cities_positions;
+    
+    return this;
 }
 
 

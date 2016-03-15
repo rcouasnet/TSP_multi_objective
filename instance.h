@@ -21,6 +21,16 @@ public:
     Instance(const Instance& other);
     Instance& operator=(const Instance& other);
 
+    /**
+     * Impression sur un flux de l'instance
+     * @param out
+     * @return le flux donné en paramètre avec l'instance 'imprimé'
+     */
+    std::ostream& print(std::ostream& out) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const Instance& instance)
+    { return instance.print(out); }
+    
     bool tryLoadFile(const std::string& fileName);
     void displayInstance();
 
