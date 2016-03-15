@@ -10,6 +10,9 @@ int main(int argc, char **argv) {
     cout << "lecture réussie" << endl;
     cout << i<< endl;
   }
+  else {
+      cerr<< "Echec lecture" << endl;
+  }
   
   return 0;
 }
