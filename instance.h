@@ -34,8 +34,6 @@ public:
     bool tryLoadFile(const std::string& fileName);
     
     const Coordinates& get_city(int id) const;
-    
-    void displayInstance();
 
 };
 

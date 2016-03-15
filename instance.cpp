@@ -99,10 +99,11 @@ const Coordinates& Instance::get_city(int id) const
     else return *(new Coordinates(-1, -1));
 }
 
-void Instance::displayInstance()
+ostream& Instance::print(ostream& out) const
 {
     for(unsigned int i=0; i < nb_cities; ++i) {
-       cout << "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
-      
+       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
     }
+    
+    return out;
 }
