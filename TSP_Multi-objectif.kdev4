@@ -1,0 +1,4 @@
+[Project]
+Name=TSP_Multi-objectif
+Manager=KDevCMakeManager
+VersionControl=kdevgit
