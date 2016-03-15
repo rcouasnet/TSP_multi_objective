@@ -44,7 +44,6 @@ bool Instance::tryLoadFile(const string& fileName){
         return false;
     }else{
         string line;
-        int indice = -1;
 	
 	clog << "Lecture fichier :"<< endl;
 	for (int i= 1 ; i <= 3; ++i){
@@ -53,10 +52,9 @@ bool Instance::tryLoadFile(const string& fileName){
 	}
 	
 	
-	// Lecture de la première ligne renseignant nombre de lignes et nombre de colonnes
+	// Lecture de la ligne contenant le nombre de villes
 	getline(f,line);
 	cout << line << endl;
-	
 	
 	vector<string>& tokens_line = explode(line);
 	/*
@@ -97,7 +95,7 @@ bool Instance::tryLoadFile(const string& fileName){
 
 }
 
-const Coordinates& Instance::get_city(int id) const
+const Coordinates& Instance::get_city(unsigned int id) const
 {
     if (id <= nb_cities && id >0){
 	return cities_positions[id];
@@ -110,13 +108,13 @@ int Instance::get_nbcities() const
   return nb_cities;
 }
 
-
-void Instance::displayInstance()
+ostream& Instance::print(ostream& out) const
 {
     for(unsigned int i=1; i <= nb_cities; ++i) {
-       cout << "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
-      
+       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
     }
+    
+    return out;
 }
 
 float Instance::distance(Coordinates A, Coordinates B)
