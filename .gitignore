@@ -29,5 +29,5 @@
 
 # Kdev files
 .kdev/*
-.build/*
+.build/
 *.kdev4

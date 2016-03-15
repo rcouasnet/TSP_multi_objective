@@ -13,7 +13,7 @@
 class Instance
 {
 private:
-    int nb_cities;
+    unsigned int nb_cities;
     std::vector<Coordinates>	cities_positions;
    
 public:
@@ -33,7 +33,9 @@ public:
     
     bool tryLoadFile(const std::string& fileName);
     
-    const Coordinates& get_city(int id) const;
+    int get_nbcities() const; 
+    
+    const Coordinates& get_city(unsigned int id) const;
 
 };
 

@@ -8,6 +8,10 @@
 
 /home/florian/git/TSP_multi_objective/coordinates.h
 
+/home/florian/git/TSP_multi_objective/instance.cpp
+instance.h
+/home/florian/git/TSP_multi_objective/instance.h
+
 /home/florian/git/TSP_multi_objective/instance.h
 string
 -
