@@ -46,15 +46,15 @@ public:
      * @param A première coordonnée
      * @param B seconde coordonnée
      */
-    float distance(Coordinates A, Coordinates B);
+    float calc_distance(Coordinates A, Coordinates B);
     /**
      * Calcule la distance entre 2 villes
      * @param A première ville
      * @param B seconde ville
      */
-    float distance(int A, int B);
+    float calc_distance(int A, int B);
     
-    std::vector< std::vector<float> > matriceDistance(Instance inst);
+    std::vector< std::vector<float> >& matriceDistance(Instance inst);
     
 };
 

@@ -117,18 +117,27 @@ ostream& Instance::print(ostream& out) const
     return out;
 }
  
-float Instance::distance(Coordinates A, Coordinates B)
+float Instance::calc_distance(Coordinates A, Coordinates B)
 {
   return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
 
-float Instance::distance(int A, int B)
+float Instance::calc_distance(int A, int B)
 {
-    return distance(cities_positions[A], cities_positions[B]);
+    return calc_distance(cities_positions[A], cities_positions[B]);
 }
 
 
-/*vector<vector<float>> matriceDistance(Instance inst) {
-
-}*/
+vector< vector<float> >& Instance::matriceDistance(Instance inst) {
+    vector< vector<float> >& mat_dist= *(new vector< vector<float> >);
+    
+    for (int i= 1; i<= 100; ++i){
+	mat_dist.push_back(vector<float>());
+	for (int j= 1; j<= 100; ++j){
+	    mat_dist[i].push_back(calc_distance(i, j));
+	}
+    }
+    
+    return mat_dist;
+}
 
