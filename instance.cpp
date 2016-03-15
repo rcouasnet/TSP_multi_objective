@@ -116,7 +116,7 @@ ostream& Instance::print(ostream& out) const
     
     return out;
 }
-
+ 
 float Instance::distance(Coordinates A, Coordinates B)
 {
   return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
