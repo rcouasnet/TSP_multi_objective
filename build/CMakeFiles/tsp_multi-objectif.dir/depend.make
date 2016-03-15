@@ -8,5 +8,7 @@ CMakeFiles/tsp_multi-objectif.dir/instance.o: ../coordinates.h
 CMakeFiles/tsp_multi-objectif.dir/instance.o: ../instance.cpp
 CMakeFiles/tsp_multi-objectif.dir/instance.o: ../instance.h
 
+CMakeFiles/tsp_multi-objectif.dir/main.o: ../coordinates.h
+CMakeFiles/tsp_multi-objectif.dir/main.o: ../instance.h
 CMakeFiles/tsp_multi-objectif.dir/main.o: ../main.cpp
 

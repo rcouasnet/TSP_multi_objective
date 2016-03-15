@@ -29,7 +29,7 @@ Instance& Instance::operator=(const Instance& other)
     nb_cities=other.nb_cities;
     cities_positions= other.cities_positions;
     
-    return this;
+    return *this;
 }
 
 
@@ -91,19 +91,18 @@ bool Instance::tryLoadFile(const string& fileName){
 
 }
 
-<<<<<<< HEAD
 const Coordinates& Instance::get_city(int id) const
 {
     if (id <= nb_cities && id >0){
-	return cities_postions[id];
+	return cities_positions[id];
     }
-    else return Coordinates(-1, -1);
-=======
+    else return *(new Coordinates(-1, -1));
+}
+
 void Instance::displayInstance()
 {
     for(unsigned int i=0; i < nb_cities; ++i) {
        cout << "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
       
     }
->>>>>>> bf203f1f4bccd7448e90e3727e8af2ee81d2060e
 }
