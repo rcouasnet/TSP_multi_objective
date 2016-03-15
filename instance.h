@@ -31,6 +31,11 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Instance& instance)
     { return instance.print(out); }
     
+    /**
+     * Charge le fichier d'instance et initialise l'instance
+     * @param fileName chemin du fichier chargé
+     * @return true si le fichier est correctement chargé
+     */
     bool tryLoadFile(const std::string& fileName);
     
     int get_nbcities() const; 
