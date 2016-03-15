@@ -33,6 +33,8 @@ public:
     
     bool tryLoadFile(const std::string& fileName);
     
+    int get_nbcities() const; 
+    
     const Coordinates& get_city(int id) const;
     
     void displayInstance();

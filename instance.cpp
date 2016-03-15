@@ -46,7 +46,7 @@ bool Instance::tryLoadFile(const string& fileName){
         int indice = -1;
 	
 	clog << "Lecture fichier :"<< endl;
-	for (int i= 1 ; i <= 6; ++i){
+	for (int i= 1 ; i <= 3; ++i){
 	    getline(f,line);
 	    clog << "Ligne "<< i<< " contient : "<< line<< endl;
 	}
@@ -66,6 +66,11 @@ bool Instance::tryLoadFile(const string& fileName){
 	cities_positions.reserve(nb_cities +1);
 	
 	delete(&tokens_line);
+	
+	for (int i= 5 ; i <= 6; ++i){
+	    getline(f,line);
+	    clog << "Ligne "<< i<< " contient : "<< line<< endl;
+	}
 	
         while(getline(f,line)){
 
@@ -99,9 +104,15 @@ const Coordinates& Instance::get_city(int id) const
     else return *(new Coordinates(-1, -1));
 }
 
+int Instance::get_nbcities() const
+{
+  return nb_cities;
+}
+
+
 void Instance::displayInstance()
 {
-    for(unsigned int i=0; i < nb_cities; ++i) {
+    for(unsigned int i=1; i <= nb_cities; ++i) {
        cout << "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
       
     }
