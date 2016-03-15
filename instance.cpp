@@ -1,4 +1,5 @@
 #include "instance.h"
+#include <math.h>
 
 using namespace std;
 
@@ -117,3 +118,13 @@ void Instance::displayInstance()
       
     }
 }
+
+float Instance::distance(Coordinates A, Coordinates B)
+{
+  return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
+}
+
+/*vector<vector<float>> matriceDistance(Instance inst) {
+
+}*/
+

@@ -38,6 +38,10 @@ public:
     const Coordinates& get_city(int id) const;
     
     void displayInstance();
+    
+    float distance(Coordinates A, Coordinates B);
+    
+    std::vector< std::vector<float> > matriceDistance(Instance inst);
 
 };
 
