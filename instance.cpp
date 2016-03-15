@@ -29,7 +29,7 @@ Instance& Instance::operator=(const Instance& other)
     nb_cities=other.nb_cities;
     cities_positions= other.cities_positions;
     
-    return this;
+    return *this;
 }
 
 
@@ -89,6 +89,14 @@ bool Instance::tryLoadFile(const string& fileName){
 
     return true;
 
+}
+
+const Coordinates& Instance::get_city(int id) const
+{
+    if (id <= nb_cities && id >0){
+	return cities_positions[id];
+    }
+    else return *(new Coordinates(-1, -1));
 }
 
 void Instance::displayInstance()
