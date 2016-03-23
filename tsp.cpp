@@ -2,12 +2,12 @@
 
 using namespace std;
 
-Tsp::Tsp(const std::string& if1, const std::string& if2){
+Tsp::Tsp(const std::string& fi1, const std::string& fi2){
   i1 = new Instance();
   i2 = new Instance();
 
-  i1->tryLoadFile(if1);
-  i2->tryLoadFile(if2);
+  i1->tryLoadFile(fi1);
+  i2->tryLoadFile(fi2);
 }
 
 void Tsp::evaluation(){
@@ -17,5 +17,8 @@ void Tsp::evaluation(){
     setTotalCost1(getTotalCost1() + i1->calc_distance(i1->get_city(i), i1->get_city(i+1)));
     setTotalCost2(getTotalCost2() + i2->calc_distance(i2->get_city(i), i2->get_city(i+1)));
   }
+  cout << "Evaluation : " << getTotalCost1() << endl;
+  cout << "Evaluation : " << getTotalCost2() << endl;
+
 }
 

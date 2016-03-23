@@ -14,11 +14,11 @@ class Tsp
 {
 private:
     Instance *i1, *i2;
-    std::string InstanceFile1, InstanceFile2;
+    std::string file_i1, file_i2;
     double total_cost_1, total_cost_2;
     
 public:
-      Tsp(const std::string& if1, const std::string& if2);
+      Tsp(const std::string& fi1, const std::string& fi2);
       void evaluation();
       double getTotalCost1(){	return total_cost_1;  }
       double getTotalCost2(){	return total_cost_2;  }
