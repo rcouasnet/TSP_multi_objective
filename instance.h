@@ -15,6 +15,7 @@ class Instance
 private:
     unsigned int nb_cities;
     std::vector<Coordinates>	cities_positions;
+    std::vector< std::vector <double> > cost_matrice;
    
 public:
     Instance();
@@ -53,8 +54,10 @@ public:
      * @param B seconde ville
      */
     float calc_distance(int A, int B);
-    
-    std::vector< std::vector<float> >& matriceDistance(Instance inst);
+    /**
+     * @return la matrice de distance de l'instance
+     */
+    std::vector< std::vector<float> >& matriceDistance();
     
 };
 

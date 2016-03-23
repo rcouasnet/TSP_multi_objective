@@ -128,7 +128,7 @@ float Instance::calc_distance(int A, int B)
 }
 
 
-vector< vector<float> >& Instance::matriceDistance(Instance inst) {
+vector< vector<float> >& Instance::matriceDistance() {
     vector< vector<float> >& mat_dist= *(new vector< vector<float> >);
     
     for (int i= 1; i<= 100; ++i){
@@ -140,4 +140,3 @@ vector< vector<float> >& Instance::matriceDistance(Instance inst) {
     
     return mat_dist;
 }
-
