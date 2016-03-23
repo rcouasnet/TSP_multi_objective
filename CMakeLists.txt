@@ -1,6 +1,6 @@
 project(tsp_multi-objectif)
 
-add_definitions(-Wall)
+add_definitions(-Wall -std=c++11)
 
 add_executable(tsp_multi-objectif coordinates.cpp instance.cpp main.cpp)
 

@@ -7,6 +7,7 @@
 #include <vector>
 #include <cstdlib>
 #include <sstream>
+#include <ostream>
 
 #include "coordinates.h"
 
@@ -58,6 +59,22 @@ public:
      * @return la matrice de distance de l'instance
      */
     std::vector< std::vector<float> >& matriceDistance();
+    
+    /** Sauvegarde pour GNU Plot **/
+    /**
+     * Sauvegarde de l'instance dans un fichier texte
+     * @param fileName : chemin du fichier
+     * @return false si le fichier ne peut pas être crée
+     */
+    bool trySaveToTxt(const std::string& fileName);
+    
+    /**
+     * Sauvegarde du front Pareto
+     * @param fileName : chemin du fichier
+     * @return false si le fichier ne peut pas être crée
+     * TODO
+     */
+    bool trySaveParetoToTxt(const std::string& fileName);
     
 };
 

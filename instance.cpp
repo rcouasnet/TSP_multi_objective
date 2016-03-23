@@ -125,6 +125,32 @@ float Instance::calc_distance(int A, int B)
     return calc_distance(cities_positions[A], cities_positions[B]);
 }
 
+bool Instance::trySaveToTxt(const string& fileName)
+{
+    ofstream file(fileName);
+//     fstream* file= new fstream(fileName.c_str(), std::ios::out);
+
+    if(!file.is_open()){
+        cerr << "Erreur pendant l'ouverture du fichier" << endl;
+        return false;
+    }else{
+	
+	for (unsigned i =1; i<= nb_cities; ++i){
+	    ostringstream oss;
+	    oss << cities_positions[i].col<< " "<< cities_positions[i].row;
+	    
+	    string line= oss.str();
+	    
+	    // Ecriture des coordonnées de la ville 
+	    file << line;
+	}
+	
+	file.close();
+    }
+
+    return true;
+
+}
 
 vector< vector<float> >& Instance::matriceDistance() {
     vector< vector<float> >& mat_dist= *(new vector< vector<float> >);
