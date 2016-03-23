@@ -103,7 +103,7 @@ const Coordinates& Instance::get_city(unsigned int id) const
     else return *(new Coordinates(-1, -1));
 }
 
-int Instance::get_nbcities() const
+unsigned int Instance::get_nbcities() const
 {
   return nb_cities;
 }
@@ -117,7 +117,7 @@ ostream& Instance::print(ostream& out) const
     return out;
 }
  
-float Instance::calc_distance(Coordinates A, Coordinates B)
+float Instance::calc_distance(const Coordinates& A, const Coordinates& B)
 {
   return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
