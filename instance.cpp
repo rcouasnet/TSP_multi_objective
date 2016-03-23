@@ -33,7 +33,18 @@ Instance& Instance::operator=(const Instance& other)
     return *this;
 }
 
+const Coordinates& Instance::get_city(unsigned int id) const
+{
+    if (id <= nb_cities && id >0){
+	return cities_positions[id];
+    }
+    else return *(new Coordinates(-1, -1));
+}
 
+int Instance::get_nbcities() const
+{
+  return nb_cities;
+}
 
 bool Instance::tryLoadFile(const string& fileName){
 
@@ -93,19 +104,6 @@ bool Instance::tryLoadFile(const string& fileName){
 
     return true;
 
-}
-
-const Coordinates& Instance::get_city(unsigned int id) const
-{
-    if (id <= nb_cities && id >0){
-	return cities_positions[id];
-    }
-    else return *(new Coordinates(-1, -1));
-}
-
-int Instance::get_nbcities() const
-{
-  return nb_cities;
 }
 
 ostream& Instance::print(ostream& out) const

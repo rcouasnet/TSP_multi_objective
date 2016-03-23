@@ -61,4 +61,6 @@ public:
     
 };
 
+std::vector<std::string>& explode(const std::string &str);
+
 #endif // INSTANCE_H
