@@ -23,7 +23,7 @@ public:
     Instance(const Instance& other);
     Instance& operator=(const Instance& other);
 
-    int get_nbcities() const; 
+    unsigned get_nbcities() const; 
     
     const Coordinates& get_city(unsigned int id) const;
     
@@ -48,7 +48,7 @@ public:
      * @param A première coordonnée
      * @param B seconde coordonnée
      */
-    float calc_distance(Coordinates A, Coordinates B);
+    float calc_distance(const Coordinates& A, const Coordinates& B);
     /**
      * Calcule la distance entre 2 villes
      * @param A première ville

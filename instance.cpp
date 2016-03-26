@@ -106,6 +106,19 @@ bool Instance::tryLoadFile(const string& fileName){
 
 }
 
+const Coordinates& Instance::get_city(unsigned int id) const
+{
+    if (id <= nb_cities && id >0){
+	return cities_positions[id];
+    }
+    else return *(new Coordinates(-1, -1));
+}
+
+unsigned int Instance::get_nbcities() const
+{
+  return nb_cities;
+}
+
 ostream& Instance::print(ostream& out) const
 {
     for(unsigned int i=1; i <= nb_cities; ++i) {
@@ -115,7 +128,7 @@ ostream& Instance::print(ostream& out) const
     return out;
 }
  
-float Instance::calc_distance(Coordinates A, Coordinates B)
+float Instance::calc_distance(const Coordinates& A, const Coordinates& B)
 {
   return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
