@@ -12,23 +12,19 @@ int main(int argc, char **argv) {
   std::string File_B = "../data/kroB100.tsp";
 
   if (i1.tryLoadFile(File_A)){
-    cout << "lecture réussie : " << i1 << "\n" << endl;
-  }
-  else {
-      cerr<< "Echec lecture : " << i1 << "\n" << endl;
+    clog << "lecture réussie : " << i1 << "\n" << endl;
   }
   
   if (i2.tryLoadFile(File_B)){
-    cout << "lecture réussie" << i2 << "\n" << endl;
-  }
-  else {
-      cerr<< "Echec lecture : " << i2 << "\n" << endl;
+    clog << "lecture réussie" << i2 << "\n" << endl;
   }
   
   Tsp *t1 = new Tsp(File_A, File_B);
   t1->evaluation();
   
-  i1.trySaveToTxt("< ! Test ! >../data/results/500_krA100.tsp< ! Test ! >");
+  cout << "< ! Test ! >";
+  i1.trySaveToTxt("../data/results/500_krA100.tsp");
+  cout << "</ ! Test ! >";
 
   return 0;
 }

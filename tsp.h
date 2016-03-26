@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <sstream>
 
+#include "debug.h"
+
 #include "instance.h"
 #include "coordinates.h"
 

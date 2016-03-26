@@ -9,6 +9,8 @@
 #include <sstream>
 #include <ostream>
 
+#include "debug.h"
+
 #include "coordinates.h"
 
 class Instance
@@ -16,7 +18,7 @@ class Instance
 private:
     unsigned int nb_cities;
     std::vector<Coordinates>	cities_positions;
-    std::vector< std::vector <double> > cost_matrice;
+    std::vector< std::vector <float> > cost_matrice;
    
 public:
     Instance();
@@ -27,6 +29,12 @@ public:
     unsigned get_nbcities() const {  return nb_cities; } 
 
     const Coordinates& get_city(unsigned int id) const;
+    
+    /** Setters	**/
+    /**
+     * Initialise les tailles de la matrice de distance
+     */
+    void initCostMatrice();
     
     /**
      * Impression sur un flux de l'instance
@@ -44,24 +52,36 @@ public:
      * @return true si le fichier est correctement chargé
      */
     bool tryLoadFile(const std::string& fileName);
+    
+/***	Operations sur les distances	***/
+private:
     /**
      * Calcule la distance entre 2 coordonnées
      * @param A première coordonnée
      * @param B seconde coordonnée
      */
-    float calc_distance(const Coordinates& A, const Coordinates& B);
+    float calcDistance(const Coordinates& A, const Coordinates& B);
     /**
      * Calcule la distance entre 2 villes
      * @param A première ville
      * @param B seconde ville
      */
-    float calc_distance(int A, int B);
+    float calcDistance(int ind_A, int ind_B);
+
+public:
     /**
      * @return la matrice de distance de l'instance
      */
-    std::vector< std::vector<float> >& matriceDistance();
+    void setMatriceDistance();
+    /**
+     * Calcule la distance entre 2 villes
+     * @param A première ville
+     * @param B seconde ville
+     */
+    float get_distance(int ind_A, int ind_B) const; 
     
-    /** Sauvegarde pour GNU Plot **/
+    
+/*** Sauvegardes pour GNU Plot **/
     /**
      * Sauvegarde de l'instance dans un fichier texte
      * @param fileName : chemin du fichier
