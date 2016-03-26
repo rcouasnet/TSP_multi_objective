@@ -23,8 +23,9 @@ public:
     Instance(const Instance& other);
     Instance& operator=(const Instance& other);
 
-    unsigned get_nbcities() const; 
-    
+    /** Getters **/
+    unsigned get_nbcities() const {  return nb_cities; } 
+
     const Coordinates& get_city(unsigned int id) const;
     
     /**

@@ -15,15 +15,11 @@ vector<string>& explode(const string &str){
 
 
 Instance::Instance()
-{
-
-}
+{ }
 
 Instance::Instance(const Instance& other):
     nb_cities(other.nb_cities), cities_positions(other.cities_positions)
-{
-
-}
+{ }
 
 Instance& Instance::operator=(const Instance& other)
 {
@@ -41,10 +37,28 @@ const Coordinates& Instance::get_city(unsigned int id) const
     else return *(new Coordinates(-1, -1));
 }
 
-int Instance::get_nbcities() const
+ostream& Instance::print(ostream& out) const
 {
-  return nb_cities;
+    for(unsigned int i=1; i <= nb_cities; ++i) {
+       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
+    }
+    
+    return out;
 }
+ 
+float Instance::calc_distance(const Coordinates& A, const Coordinates& B)
+{
+    return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
+}
+
+float Instance::calc_distance(int A, int B)
+{
+    return calc_distance(cities_positions[A], cities_positions[B]);
+}
+
+// ###################################
+//	Lectures/Ecriture fichiers
+// ###################################
 
 bool Instance::tryLoadFile(const string& fileName){
 
@@ -103,39 +117,6 @@ bool Instance::tryLoadFile(const string& fileName){
     }
 
     return true;
-
-}
-
-const Coordinates& Instance::get_city(unsigned int id) const
-{
-    if (id <= nb_cities && id >0){
-	return cities_positions[id];
-    }
-    else return *(new Coordinates(-1, -1));
-}
-
-unsigned int Instance::get_nbcities() const
-{
-  return nb_cities;
-}
-
-ostream& Instance::print(ostream& out) const
-{
-    for(unsigned int i=1; i <= nb_cities; ++i) {
-       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
-    }
-    
-    return out;
-}
- 
-float Instance::calc_distance(const Coordinates& A, const Coordinates& B)
-{
-  return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
-}
-
-float Instance::calc_distance(int A, int B)
-{
-    return calc_distance(cities_positions[A], cities_positions[B]);
 }
 
 bool Instance::trySaveToTxt(const string& fileName)
@@ -161,7 +142,6 @@ bool Instance::trySaveToTxt(const string& fileName)
     }
 
     return true;
-
 }
 
 vector< vector<float> >& Instance::matriceDistance() {
