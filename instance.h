@@ -7,6 +7,7 @@
 #include <vector>
 #include <cstdlib>
 #include <sstream>
+#include <ostream>
 
 #include "coordinates.h"
 
@@ -15,6 +16,7 @@ class Instance
 private:
     unsigned int nb_cities;
     std::vector<Coordinates>	cities_positions;
+    std::vector< std::vector <double> > cost_matrice;
    
 public:
     Instance();
@@ -53,9 +55,29 @@ public:
      * @param B seconde ville
      */
     float calc_distance(int A, int B);
+    /**
+     * @return la matrice de distance de l'instance
+     */
+    std::vector< std::vector<float> >& matriceDistance();
     
-    std::vector< std::vector<float> >& matriceDistance(Instance inst);
+    /** Sauvegarde pour GNU Plot **/
+    /**
+     * Sauvegarde de l'instance dans un fichier texte
+     * @param fileName : chemin du fichier
+     * @return false si le fichier ne peut pas être crée
+     */
+    bool trySaveToTxt(const std::string& fileName);
+    
+    /**
+     * Sauvegarde du front Pareto
+     * @param fileName : chemin du fichier
+     * @return false si le fichier ne peut pas être crée
+     * TODO
+     */
+    bool trySaveParetoToTxt(const std::string& fileName);
     
 };
+
+std::vector<std::string>& explode(const std::string &str);
 
 #endif // INSTANCE_H

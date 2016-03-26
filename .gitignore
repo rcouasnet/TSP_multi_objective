@@ -29,5 +29,15 @@
 
 # Kdev files
 .kdev/*
-.build/
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+cmake_multi-objectif
 *.kdev4
+
+#Others files
+tsp_mo/
+tsp_mo.tar.gz
+tsp_multi-objectif

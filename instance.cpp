@@ -33,7 +33,18 @@ Instance& Instance::operator=(const Instance& other)
     return *this;
 }
 
+const Coordinates& Instance::get_city(unsigned int id) const
+{
+    if (id <= nb_cities && id >0){
+	return cities_positions[id];
+    }
+    else return *(new Coordinates(-1, -1));
+}
 
+int Instance::get_nbcities() const
+{
+  return nb_cities;
+}
 
 bool Instance::tryLoadFile(const string& fileName){
 
@@ -95,6 +106,7 @@ bool Instance::tryLoadFile(const string& fileName){
 
 }
 
+<<<<<<< HEAD
 const Coordinates& Instance::get_city(unsigned int id) const
 {
     if (id <= nb_cities && id >0){
@@ -108,6 +120,8 @@ unsigned int Instance::get_nbcities() const
   return nb_cities;
 }
 
+=======
+>>>>>>> 8b388ee0f8547bb32c3458d95eb8f9c00f6e5326
 ostream& Instance::print(ostream& out) const
 {
     for(unsigned int i=1; i <= nb_cities; ++i) {
@@ -127,8 +141,34 @@ float Instance::calc_distance(int A, int B)
     return calc_distance(cities_positions[A], cities_positions[B]);
 }
 
+bool Instance::trySaveToTxt(const string& fileName)
+{
+    ofstream file(fileName);
+//     fstream* file= new fstream(fileName.c_str(), std::ios::out);
 
-vector< vector<float> >& Instance::matriceDistance(Instance inst) {
+    if(!file.is_open()){
+        cerr << "Erreur pendant l'ouverture du fichier" << endl;
+        return false;
+    }else{
+	
+	for (unsigned i =1; i<= nb_cities; ++i){
+	    ostringstream oss;
+	    oss << cities_positions[i].col<< " "<< cities_positions[i].row;
+	    
+	    string line= oss.str();
+	    
+	    // Ecriture des coordonnées de la ville 
+	    file << line;
+	}
+	
+	file.close();
+    }
+
+    return true;
+
+}
+
+vector< vector<float> >& Instance::matriceDistance() {
     vector< vector<float> >& mat_dist= *(new vector< vector<float> >);
     
     for (int i= 1; i<= 100; ++i){
@@ -140,4 +180,3 @@ vector< vector<float> >& Instance::matriceDistance(Instance inst) {
     
     return mat_dist;
 }
-
