@@ -18,6 +18,8 @@ int main(int argc, char **argv) {
   Coordinates B(3, 1);
 
   cout << "< ! Test ! > distance[A(4,7), B(3,1)] = " << i.calc_distance(A, B) << " < ! Test ! >" << endl;
+  
+  i.trySaveToTxt("../data/results/500_krA100.tsp");
  
   return 0;
 }

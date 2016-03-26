@@ -128,7 +128,6 @@ float Instance::calc_distance(int A, int B)
 bool Instance::trySaveToTxt(const string& fileName)
 {
     ofstream file(fileName);
-//     fstream* file= new fstream(fileName.c_str(), std::ios::out);
 
     if(!file.is_open()){
         cerr << "Erreur pendant l'ouverture du fichier" << endl;
@@ -137,7 +136,7 @@ bool Instance::trySaveToTxt(const string& fileName)
 	
 	for (unsigned i =1; i<= nb_cities; ++i){
 	    ostringstream oss;
-	    oss << cities_positions[i].col<< " "<< cities_positions[i].row;
+	    oss << cities_positions[i].col<< " "<< cities_positions[i].row<< endl;
 	    
 	    string line= oss.str();
 	    
