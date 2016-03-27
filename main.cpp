@@ -27,9 +27,6 @@ int main(int argc, char **argv) {
   t1->initSeeds();
   t1->initBothCostMatrices();
   
-//   t1->generatePath(0);	// Test avec la première graine
-//   t1->initEvaluation();
-  
   t1->offlineFilter();
   
   

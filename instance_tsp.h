@@ -39,8 +39,11 @@ public:
      * Ainsi les fronts obtenus obtenus doivent être identiques"
      */
     void initSeeds();
-    
+    /**
+     * Initialise les 2 matrices de distance @SEE ce n'est pas fait dans tryLoadFile ???
+     */
     void initBothCostMatrices();
+private:
     /**
      * Crée un parcours aléatoire à partir d'une graine aléatoire
      * @param random_seed graine aléatoire utilisée
@@ -52,6 +55,8 @@ public:
      */
     void initEvaluation();
     
+public:
+    
     /*** Getters ***/
     double get_total_cost1(){	return total_cost_1;  }
     double get_total_cost2(){	return total_cost_2;  }
@@ -59,11 +64,10 @@ public:
     void set_total_cost1(double cost){	total_cost_1 = cost;  }
     void set_total_cost2(double cost){	total_cost_2 = cost;  }
     
-       /**
+    /**
      * Sauvegarde du front Pareto
      * @param fileName : chemin du fichier
      * @return false si le fichier ne peut pas être crée
-     * TODO créer trySaveParetoToTxt dans le cpp
      */
     bool trySaveParetoToTxt(std::vector<Coordinates> notDominated, const std::string& fileName);
     

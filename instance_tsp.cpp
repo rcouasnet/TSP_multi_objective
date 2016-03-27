@@ -29,7 +29,7 @@ void InstanceTsp::initBothCostMatrices()
     obj1->setMatriceDistance();
     obj2->setMatriceDistance();
 }
-
+    
 void InstanceTsp::generatePath(unsigned seed_num)
 {
 // Les instances doivent avoir le même nombre de villes
@@ -74,8 +74,7 @@ void InstanceTsp::initEvaluation()
     cout << "Evaluation instance 1 : " << get_total_cost1() << endl;
     cout << "Evaluation instance 2 : " << get_total_cost2() << endl;
 }
-
-
+    
 bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const string& fileName)
 {
     ofstream file(fileName);
