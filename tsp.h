@@ -32,7 +32,9 @@ public:
     /*** Initialisations ***/
     /**
      * Initialise les 500 graines aléatoires
-     * TODO pour l'instant, elles sont initialisée à 0, à changer
+     * TODO pour l'instant, elles sont initialisée à 0, à changer, dans le sujet : 
+     * "assurez-vous d'utiliser les mêmes graines aléatoires pour vos tests. Ainsi les fronts
+     * obtenus obtenus doivent être identiques"
      */
     void initSeeds();
     /**
