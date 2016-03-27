@@ -79,15 +79,6 @@ public:
      * @param B seconde ville
      */
     float get_distance(double ind_A, double ind_B) const; 
-    
-    
-/*** Sauvegardes pour GNU Plot **/
-    /**
-     * Sauvegarde de l'instance dans un fichier texte
-     * @param fileName : chemin du fichier
-     * @return false si le fichier ne peut pas être crée
-     */
-    bool trySaveToTxt(const std::string& fileName);
 };
 
 std::vector<std::string>& explode(const std::string &str);

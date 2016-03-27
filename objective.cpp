@@ -166,28 +166,3 @@ bool Objective::tryLoadFile(const string& fileName){
 
     return true;
 }
-
-bool Objective::trySaveToTxt(const string& fileName)
-{
-    ofstream file(fileName);
-
-    if(!file.is_open()){
-        cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
-        return false;
-    }else{
-	
-	for (unsigned i =1; i<= nb_cities; ++i){
-	    ostringstream oss;
-	    oss << cities_positions[i].col<< " "<< cities_positions[i].row<< endl;
-	    
-	    string line= oss.str();
-	    
-	    // Ecriture des coordonnées de la ville 
-	    file << line;
-	}
-	
-	file.close();
-    }
-
-    return true;
-}
