@@ -59,7 +59,6 @@ public:
      * Sauvegarde du front Pareto
      * @param fileName : chemin du fichier
      * @return false si le fichier ne peut pas être crée
-     * TODO créer trySaveParetoToTxt dans le cpp
      */
     bool trySaveParetoToTxt(std::vector<Coordinates> notDominated, const std::string& fileName);
     

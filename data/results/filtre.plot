@@ -2,4 +2,4 @@
 
     set output 'filtre500_KroAB.jpeg'
 
-    plot 'offline500_KroAB.txt', 'offlinePareto500_KroAB.txt'
+    plot 'offline500_test.txt', 'offlinePareto500_test.txt'

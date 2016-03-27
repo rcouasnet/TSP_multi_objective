@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   }
   
   InstanceTsp *t1 = new InstanceTsp(File_A, File_B);
-   t1->initSeeds();
+//   t1->initSeeds();
 //   t1->initPath(0);	// Test avec la première graine
 //   t1->initEvaluation();
   t1->offlineFilter();
