@@ -15,20 +15,18 @@ vector<string>& explode(const string &str){
 
 
 Instance::Instance()
-{
-
-}
+{}
 
 Instance::Instance(const Instance& other):
-    nb_cities(other.nb_cities), cities_positions(other.cities_positions)
-{
-
-}
+    nb_cities(other.nb_cities), cities_positions(other.cities_positions),
+    cost_matrice(other.cost_matrice)
+{}
 
 Instance& Instance::operator=(const Instance& other)
 {
     nb_cities=other.nb_cities;
     cities_positions= other.cities_positions;
+    cost_matrice= other.cost_matrice;
     
     return *this;
 }
@@ -41,10 +39,65 @@ const Coordinates& Instance::get_city(unsigned int id) const
     else return *(new Coordinates(-1, -1));
 }
 
-int Instance::get_nbcities() const
+void Instance::initCostMatrice()
 {
-  return nb_cities;
+    cost_matrice.resize(nb_cities +1);
+    for (int i= 1; i<= 100; ++i){
+	cost_matrice[i].resize(nb_cities +1);
+    }
 }
+
+ostream& Instance::print(ostream& out) const
+{
+    for(unsigned int i=1; i <= nb_cities; ++i) {
+       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")" << endl;
+    }
+    
+    return out;
+}
+ 
+double Instance::calcDistance(const Coordinates& A, const Coordinates& B)
+{
+    return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
+}
+
+double Instance::calcDistance(double ind_A, double ind_B)
+{
+    return calcDistance(cities_positions[ind_A], cities_positions[ind_B]);
+}
+
+void Instance::setMatriceDistance()
+{
+    for (int i= 1; i<= 100; ++i){
+	for (int j= i; j<= 100; ++j){
+	    // Calcule de la distance et stockage dans les 2 cases
+	    //	de la matrice correspondantes
+	    double dist_i_j= calcDistance(i, j);
+	    cost_matrice[i][j]=  dist_i_j;
+	    cost_matrice[j][i]=  dist_i_j;
+	}
+	
+	#if DEBUG_MAT_DIST
+	    cout << "Taille ligne "<< i<<" de la matrice de distances : "<<
+	    cost_matrice[i].size()<< endl;
+	#endif
+    }
+    #if DEBUG_MAT_DIST
+	cout << "Hauteur de la matrice de distances : "<< cost_matrice.size()<< endl;
+    #endif
+}
+
+float Instance::get_distance(double ind_A, double ind_B) const
+{
+    #if DEBUG_MAT_DIST
+	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
+    #endif
+    return cost_matrice[ind_A][ind_B];
+}
+
+// ###################################
+//	Lectures/Ecriture fichiers
+// ###################################
 
 bool Instance::tryLoadFile(const string& fileName){
 
@@ -54,19 +107,21 @@ bool Instance::tryLoadFile(const string& fileName){
         cerr << "Erreur pendant l'ouverture du fichier" << endl;
         return false;
     }else{
+// Lecture du nombre de villes
         string line;
 	
-	clog << "Lecture fichier :"<< endl;
 	for (int i= 1 ; i <= 3; ++i){
 	    getline(f,line);
+    #if DEBUG_LOAD_FILE
 	    clog << "Ligne "<< i<< " contient : "<< line<< endl;
+    #endif
 	}
-	
 	
 	// Lecture de la ligne contenant le nombre de villes
 	getline(f,line);
-	cout << line << endl;
-	
+	#if DEBUG_LOAD_FILE
+	    cout << line << endl;
+	#endif	
 	vector<string>& tokens_line = explode(line);
 	/*
 	 * tokens[0] : "DIMENSION:"
@@ -77,11 +132,15 @@ bool Instance::tryLoadFile(const string& fileName){
 	
 	delete(&tokens_line);
 	
+// Lecture des lignes en commentaire
 	for (int i= 5 ; i <= 6; ++i){
 	    getline(f,line);
-	    clog << "Ligne "<< i<< " contient : "<< line<< endl;
+	    #if DEBUG_LOAD_FILE
+		clog << "Ligne "<< i<< " contient : "<< line<< endl;
+	    #endif
 	}
 	
+// Lecture des positions des villes
         while(getline(f,line)){
 
             vector<string>& tokens = explode(line);
@@ -101,59 +160,24 @@ bool Instance::tryLoadFile(const string& fileName){
             delete(&tokens);
         }
     }
+    
+    initCostMatrice();
 
     return true;
-
-}
-
-<<<<<<< HEAD
-const Coordinates& Instance::get_city(unsigned int id) const
-{
-    if (id <= nb_cities && id >0){
-	return cities_positions[id];
-    }
-    else return *(new Coordinates(-1, -1));
-}
-
-unsigned int Instance::get_nbcities() const
-{
-  return nb_cities;
-}
-
-=======
->>>>>>> 8b388ee0f8547bb32c3458d95eb8f9c00f6e5326
-ostream& Instance::print(ostream& out) const
-{
-    for(unsigned int i=1; i <= nb_cities; ++i) {
-       out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")\n" << endl;
-    }
-    
-    return out;
-}
- 
-float Instance::calc_distance(const Coordinates& A, const Coordinates& B)
-{
-  return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
-}
-
-float Instance::calc_distance(int A, int B)
-{
-    return calc_distance(cities_positions[A], cities_positions[B]);
 }
 
 bool Instance::trySaveToTxt(const string& fileName)
 {
     ofstream file(fileName);
-//     fstream* file= new fstream(fileName.c_str(), std::ios::out);
 
     if(!file.is_open()){
-        cerr << "Erreur pendant l'ouverture du fichier" << endl;
+        cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
         return false;
     }else{
 	
 	for (unsigned i =1; i<= nb_cities; ++i){
 	    ostringstream oss;
-	    oss << cities_positions[i].col<< " "<< cities_positions[i].row;
+	    oss << cities_positions[i].col<< " "<< cities_positions[i].row<< endl;
 	    
 	    string line= oss.str();
 	    
@@ -165,18 +189,4 @@ bool Instance::trySaveToTxt(const string& fileName)
     }
 
     return true;
-
-}
-
-vector< vector<float> >& Instance::matriceDistance() {
-    vector< vector<float> >& mat_dist= *(new vector< vector<float> >);
-    
-    for (int i= 1; i<= 100; ++i){
-	mat_dist.push_back(vector<float>());
-	for (int j= 1; j<= 100; ++j){
-	    mat_dist[i].push_back(calc_distance(i, j));
-	}
-    }
-    
-    return mat_dist;
 }

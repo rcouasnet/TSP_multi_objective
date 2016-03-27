@@ -12,22 +12,26 @@ int main(int argc, char **argv) {
   std::string File_B = "../data/kroB100.tsp";
 
   if (i1.tryLoadFile(File_A)){
-    cout << "lecture réussie : " << i1 << "\n" << endl;
-  }
-  else {
-      cerr<< "Echec lecture : " << i1 << "\n" << endl;
+#if DEBUG_CREATION
+    clog << "lecture réussie : " << i1 << endl;
+#endif
   }
   
   if (i2.tryLoadFile(File_B)){
-    cout << "lecture réussie" << i1 << "\n" << endl;
-  }
-  else {
-      cerr<< "Echec lecture : " << i2 << "\n" << endl;
+#if DEBUG_CREATION
+    clog << "lecture réussie : " << i2 << endl;
+#endif
   }
   
   Tsp *t1 = new Tsp(File_A, File_B);
-  t1->evaluation();
- 
+//   t1->initSeeds();
+//   t1->initPath(0);	// Test avec la première graine
+//   t1->initEvaluation();
+  t1->offlineFilter();
+  
+  cout << "< ! Test ! >";
+  i1.trySaveToTxt("../data/results/500_krA100.tsp");
+  cout << "</ ! Test ! >";
 
   return 0;
 }
