@@ -19,7 +19,6 @@ void Tsp::initSeeds()
     }
 }
 
-
 void Tsp::initPath(unsigned int seed_num)
 {
 // Les instances doivent avoir le même nombre de villes
@@ -33,11 +32,13 @@ void Tsp::initPath(unsigned int seed_num)
         path[i]= i;
     }
 
-    // On mélange l'ordre du chemin
     assert(seed_num < NB_SEEDS);
+    
+    // On mélange l'ordre du chemin
     // On ne doit pas mélanger la première case avec les autres ! d'où le ++
     shuffle(++(path.begin()),path.end(),std::default_random_engine(seeds[seed_num]));
-    cout<< "La première case doit être = à -1 : "<< path[0]<< endl;
+    
+    assert(path[0] == -1);
 }
 
 
@@ -45,20 +46,22 @@ void Tsp::initEvaluation(){
     // Initialisation des matrices de distance
     obj1->setMatriceDistance();
     obj2->setMatriceDistance();
+        
+    // Cout de deplacement entre la dernière ville et la première
+    set_total_cost1( obj1->get_distance(obj1->get_nbcities(), 1) );
+    set_total_cost2( obj2->get_distance(obj2->get_nbcities(), 1) );
     
     // Calcul du cout total de chaque instance : de la première à l'avant dernière ville
     for(unsigned int i = 1 ; i < obj1->get_nbcities() ; ++i) {
 	int indice= path[i];
 	int indice_next= path[i+1];
+#if DEBUG_EVAL
 	cout << "path["<<i<<"] == "<< path[i] << endl;
+#endif
 	
 	total_cost_1 += obj1->get_distance( indice, indice_next);
 	total_cost_2 += obj2->get_distance( indice, indice_next);
     }
-    
-    // Cout de deplacement entre la dernière ville et la première
-    set_total_cost1( obj1->get_distance(obj1->get_nbcities(), 1) );
-    set_total_cost2( obj2->get_distance(obj2->get_nbcities(), 1) );
     
     cout << "Evaluation instance 1 : " << get_total_cost1() << endl;
     cout << "Evaluation instance 2 : " << get_total_cost2() << endl;

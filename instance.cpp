@@ -119,8 +119,9 @@ bool Instance::tryLoadFile(const string& fileName){
 	
 	// Lecture de la ligne contenant le nombre de villes
 	getline(f,line);
-	cout << line << endl;
-	
+	#if DEBUG_LOAD_FILE
+	    cout << line << endl;
+	#endif	
 	vector<string>& tokens_line = explode(line);
 	/*
 	 * tokens[0] : "DIMENSION:"

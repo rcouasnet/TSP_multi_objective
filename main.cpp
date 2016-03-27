@@ -12,11 +12,15 @@ int main(int argc, char **argv) {
   std::string File_B = "../data/kroB100.tsp";
 
   if (i1.tryLoadFile(File_A)){
-    clog << "lecture réussie : " << i1 << "\n" << endl;
+#if DEBUG_CREATION
+    clog << "lecture réussie : " << i1 << endl;
+#endif
   }
   
   if (i2.tryLoadFile(File_B)){
-    clog << "lecture réussie" << i2 << "\n" << endl;
+#if DEBUG_CREATION
+    clog << "lecture réussie : " << i2 << endl;
+#endif
   }
   
   Tsp *t1 = new Tsp(File_A, File_B);
