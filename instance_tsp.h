@@ -72,6 +72,11 @@ public:
     bool trySaveParetoToTxt(std::vector<Coordinates> notDominated, const std::string& fileName);
     
     void offlineFilter();
+    
+    /**
+     * En chantier
+     */
+    void onlineFilter();
   
 };
 

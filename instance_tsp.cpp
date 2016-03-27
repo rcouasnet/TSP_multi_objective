@@ -84,7 +84,7 @@ bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const str
         return false;
     }else{
         for(unsigned i=0; i < notDominated.size(); ++i){
-            file << notDominated.at(i).getCol() << " " << notDominated.at(i).getRow() << endl;
+            file << notDominated[i].col << " " << notDominated[i].row << endl;
         }
     }
     return true;
@@ -113,17 +113,17 @@ void InstanceTsp::offlineFilter()
         bool determined = false;
 
         while(l < notDominated.size() && determined == false){
-            if( (result[k][0] > notDominated.at(l).getCol()  && result[k][1] >notDominated.at(l).getRow() )) {
+            if( (result[k][0] > notDominated.at(l).col  && result[k][1] >notDominated.at(l).row )) {
 
                 determined = true;
 
-            }else if( result[k][0] < notDominated.at(l).getCol()  && result[k][1] < notDominated.at(l).getRow() ){
-                notDominated.at(l).setCol(result[k][0]);
-                notDominated.at(l).setRow(result[k][1]);
+            }else if( result[k][0] < notDominated.at(l).col  && result[k][1] < notDominated.at(l).row ){
+                notDominated.at(l).col= result[k][0];
+                notDominated.at(l).row= result[k][1];
 
                 vector<int> toDelete;
                 for(unsigned ind = l+1 ; ind < notDominated.size(); ++ind){
-                    if( (result[k][0] <  notDominated.at(ind).getCol() && result[k][1] < notDominated.at(ind).getRow()) ){
+                    if( (result[k][0] <  notDominated.at(ind).col && result[k][1] < notDominated.at(ind).row) ){
                         toDelete.push_back(ind);
                     }
                 }
@@ -166,9 +166,85 @@ void InstanceTsp::offlineFilter()
         cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
     }else{
         for(unsigned j=0; j < notDominated.size(); ++j){
-            file2 << notDominated.at(j).getCol() << " " << notDominated.at(j).getRow() << endl;
+            file2 << notDominated[j].col << " " << notDominated[j].row << endl;
         }
     }
  
 //       trySaveParetoToTxt(notDominated, "../data/results/offline500_Pareto_test.txt");
 }
+
+
+void InstanceTsp::onlineFilter()
+{
+//     pair<double,double> currentSol;
+// 
+//     vector<pair<double,double> >nonDominated;
+// 
+//     string instName =   "results/online/online500_"+instanceName+".txt";
+//     ofstream file(instName);
+// 
+//     if(!file){
+//         cerr << "Erreur de création du fichier" << endl;
+//     }
+//     else{
+//         for(unsigned i=0; i < 500 ; ++i){
+// 	  
+//             generatePath(i);
+// 
+//             // Evaluating the path
+//             initEvaluation();
+// 
+//             // Writing current solution in file online500 ...
+//             file << total_cost_1<< " " << total_cost_2<< endl;
+// 
+//             // Testing the path with all the non-dominated ones
+//             unsigned m = 0;
+//             bool determined = false;
+// 
+//             while( m < nonDominated.size() && determined == false){
+//                 if( (total_cost_1 > nonDominated.at(m).first && total_cost_2 > nonDominated.at(m).second ) ){
+//                     determined = true;
+//                 }
+//                 else if( (total_cost_1 < nonDominated.at(m).first && total_cost_2 < nonDominated.at(m).second) ){
+//                     nonDominated.at(m).first = total_cost_1;
+//                     nonDominated.at(m).second = total_cost_2;
+// 
+//                     // Propagation
+//                     vector<int> toDelete;
+//                     for(unsigned ind = m+1 ; ind < nonDominated.size(); ++ind){
+//                         if( (total_cost_1 <  nonDominated.at(ind).first && total_cost_2 < nonDominated.at(ind).second) ){
+//                             toDelete.push_back(ind);
+//                         }
+//                     }
+//                     for(unsigned del=0; del < toDelete.size(); ++del){
+//                         nonDominated.erase(nonDominated.begin()+toDelete.at(del)-del);
+//                     }
+// 
+//                     // End of propagation
+//                     determined = true;
+//                 }
+//                 else{
+//                     ++m;
+//                 }
+//             }
+// 
+//             if(determined == false){
+//                 nonDominated.push_back(pair<double,double>(total_cost_1, total_cost_2));
+//             }
+//         }
+// 
+//         // Writing Pareto local front in onlinePareto500_instanceName.txt
+//         string paretoFileName = "results/online/onlinePareto500_"+instanceName+".txt";
+// 
+//         ofstream fileP(paretoFileName);
+// 
+//         if(!fileP){
+//             cerr << "Erreur de création de fichier" << endl;
+//         }else{
+//             for(unsigned j=0; j < nonDominated.size(); ++j){
+//                 fileP << nonDominated[j].first << " " << nonDominated[j].second << endl;
+//             }
+//         }
+//     }
+}
+

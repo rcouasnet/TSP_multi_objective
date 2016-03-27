@@ -12,10 +12,10 @@ public:
     Coordinates(double _x, double _y);
     Coordinates(const Coordinates& other);
     virtual bool operator==(const Coordinates& other) const;
-    double getCol(){ return col; }
-    double getRow(){ return row; }
-    void setCol(double _x){ col = _x; }
-    void setRow(double _y){ row = _y; }
+//     double getCol(){ return col; }
+//     double getRow(){ return row; }
+//     void setCol(double _x){ col = _x; }
+//     void setRow(double _y){ row = _y; }
 	
 };
 
