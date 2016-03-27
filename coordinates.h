@@ -5,11 +5,11 @@ class Coordinates
 {
 
 public:
-    double col;
-    double row;
+    int col;
+    int row;
 
 public:
-    Coordinates(double _x, double _y);
+    Coordinates(int _x, int _y);
     Coordinates(const Coordinates& other);
     virtual bool operator==(const Coordinates& other) const;
 //     double getCol(){ return col; }

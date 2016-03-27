@@ -1,6 +1,6 @@
 #include "coordinates.h"
 
-Coordinates::Coordinates(double _x, double _y)
+Coordinates::Coordinates(int _x, int _y)
 	:col(_x), row(_y)
 {}
 
