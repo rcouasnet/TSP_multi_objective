@@ -20,7 +20,9 @@ int main(int argc, char **argv) {
   }
   
   Tsp *t1 = new Tsp(File_A, File_B);
-  t1->evaluation();
+  t1->initSeeds();
+  t1->initPath(0);	// Test avec la première graine
+  t1->initEvaluation();
   
   cout << "< ! Test ! >";
   i1.trySaveToTxt("../data/results/500_krA100.tsp");
