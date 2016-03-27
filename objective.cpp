@@ -1,4 +1,5 @@
-#include "instance.h"
+#include "instance_tsp.h"
+
 #include <math.h>
 
 using namespace std;
@@ -14,15 +15,15 @@ vector<string>& explode(const string &str){
 }
 
 
-Instance::Instance()
+Objective::Objective()
 {}
 
-Instance::Instance(const Instance& other):
+Objective::Objective(const Objective& other):
     nb_cities(other.nb_cities), cities_positions(other.cities_positions),
     cost_matrice(other.cost_matrice)
 {}
 
-Instance& Instance::operator=(const Instance& other)
+Objective& Objective::operator=(const Objective& other)
 {
     nb_cities=other.nb_cities;
     cities_positions= other.cities_positions;
@@ -31,7 +32,7 @@ Instance& Instance::operator=(const Instance& other)
     return *this;
 }
 
-const Coordinates& Instance::get_city(unsigned int id) const
+const Coordinates& Objective::get_city(unsigned int id) const
 {
     if (id <= nb_cities && id >0){
 	return cities_positions[id];
@@ -39,7 +40,7 @@ const Coordinates& Instance::get_city(unsigned int id) const
     else return *(new Coordinates(-1, -1));
 }
 
-void Instance::initCostMatrice()
+void Objective::initCostMatrice()
 {
     cost_matrice.resize(nb_cities +1);
     for (int i= 1; i<= 100; ++i){
@@ -47,7 +48,7 @@ void Instance::initCostMatrice()
     }
 }
 
-ostream& Instance::print(ostream& out) const
+ostream& Objective::print(ostream& out) const
 {
     for(unsigned int i=1; i <= nb_cities; ++i) {
        out<< "id[" << i << "] (" << cities_positions[i].col << ", " << cities_positions[i].row << ")" << endl;
@@ -56,17 +57,17 @@ ostream& Instance::print(ostream& out) const
     return out;
 }
  
-double Instance::calcDistance(const Coordinates& A, const Coordinates& B)
+double Objective::calcDistance(const Coordinates& A, const Coordinates& B)
 {
     return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
 
-double Instance::calcDistance(double ind_A, double ind_B)
+double Objective::calcDistance(double ind_A, double ind_B)
 {
     return calcDistance(cities_positions[ind_A], cities_positions[ind_B]);
 }
 
-void Instance::setMatriceDistance()
+void Objective::setMatriceDistance()
 {
     for (int i= 1; i<= 100; ++i){
 	for (int j= i; j<= 100; ++j){
@@ -87,7 +88,7 @@ void Instance::setMatriceDistance()
     #endif
 }
 
-float Instance::get_distance(double ind_A, double ind_B) const
+float Objective::get_distance(double ind_A, double ind_B) const
 {
     #if DEBUG_MAT_DIST
 	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
@@ -99,7 +100,7 @@ float Instance::get_distance(double ind_A, double ind_B) const
 //	Lectures/Ecriture fichiers
 // ###################################
 
-bool Instance::tryLoadFile(const string& fileName){
+bool Objective::tryLoadFile(const string& fileName){
 
     ifstream f(fileName.c_str());
 
@@ -166,7 +167,7 @@ bool Instance::tryLoadFile(const string& fileName){
     return true;
 }
 
-bool Instance::trySaveToTxt(const string& fileName)
+bool Objective::trySaveToTxt(const string& fileName)
 {
     ofstream file(fileName);
 

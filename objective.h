@@ -13,7 +13,7 @@
 
 #include "coordinates.h"
 
-class Instance
+class Objective
 {
 private:
     unsigned int nb_cities;
@@ -21,9 +21,9 @@ private:
     std::vector< std::vector <float> > cost_matrice;
    
 public:
-    Instance();
-    Instance(const Instance& other);
-    Instance& operator=(const Instance& other);
+    Objective();
+    Objective(const Objective& other);
+    Objective& operator=(const Objective& other);
 
     /** Getters **/
     unsigned get_nbcities() const {  return nb_cities; } 
@@ -43,7 +43,7 @@ public:
      */
     std::ostream& print(std::ostream& out) const;
 
-    friend std::ostream& operator<<(std::ostream& out, const Instance& instance)
+    friend std::ostream& operator<<(std::ostream& out, const Objective& instance)
     { return instance.print(out); }
     
     /**
@@ -88,9 +88,6 @@ public:
      * @return false si le fichier ne peut pas être crée
      */
     bool trySaveToTxt(const std::string& fileName);
-    
-
-    
 };
 
 std::vector<std::string>& explode(const std::string &str);

@@ -1,13 +1,13 @@
 #include <iostream>
-#include "instance.h"
-#include "tsp.h"
+#include "objective.h"
+#include "instance_tsp.h"
 
 
 using namespace std;
 
 
 int main(int argc, char **argv) {
-  Instance i1, i2;
+  Objective i1, i2;
   std::string File_A = "../data/kroA100.tsp";
   std::string File_B = "../data/kroB100.tsp";
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 #endif
   }
   
-  Tsp *t1 = new Tsp(File_A, File_B);
+  InstanceTsp *t1 = new InstanceTsp(File_A, File_B);
    t1->initSeeds();
 //   t1->initPath(0);	// Test avec la première graine
 //   t1->initEvaluation();

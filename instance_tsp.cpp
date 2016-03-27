@@ -1,25 +1,25 @@
-#include "tsp.h"
+#include "instance_tsp.h"
 
 using namespace std;
 
-Tsp::Tsp(const std::string& fobj1, const std::string& fobj2) :
+InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
     total_cost_1(-1), total_cost_2(-1)
 {
-  obj1 = new Instance();
-  obj2 = new Instance();
+  obj1 = new Objective();
+  obj2 = new Objective();
 
   obj1->tryLoadFile(fobj1);
   obj2->tryLoadFile(fobj2);
 }
 
-void Tsp::initSeeds()
+void InstanceTsp::initSeeds()
 {
     for(int i = 0; i < NB_SEEDS; ++i){ 
 	seeds[i] = 0;
     }
 }
 
-void Tsp::initPath(unsigned int seed_num)
+void InstanceTsp::initPath(unsigned int seed_num)
 {
 // Les instances doivent avoir le même nombre de villes
     
@@ -42,7 +42,7 @@ void Tsp::initPath(unsigned int seed_num)
 }
 
 
-void Tsp::initEvaluation(){
+void InstanceTsp::initEvaluation(){
     // Initialisation des matrices de distance
     obj1->setMatriceDistance();
     obj2->setMatriceDistance();
@@ -68,7 +68,7 @@ void Tsp::initEvaluation(){
 }
 
 
-bool Tsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const string& fileName)
+bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const string& fileName)
 {
     ofstream file(fileName);
 
@@ -85,7 +85,7 @@ bool Tsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const string& fil
 
 
 
-void Tsp::offlineFilter()
+void InstanceTsp::offlineFilter()
 {
     double result[500][2] = { { 0 } };
 

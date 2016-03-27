@@ -11,15 +11,15 @@
 
 #include "debug.h"
 
-#include "instance.h"
+#include "objective.h"
 #include "coordinates.h"
 
 #define NB_SEEDS	500
 
-class Tsp
+class InstanceTsp
 {
 private:
-    Instance *obj1, *obj2;
+    Objective *obj1, *obj2;
     std::string file_i1, file_i2;
     double total_cost_1, total_cost_2;
     
@@ -28,7 +28,7 @@ private:
     unsigned seeds[NB_SEEDS];
     
 public:
-    Tsp(const std::string& fi1, const std::string& fi2);
+    InstanceTsp(const std::string& fi1, const std::string& fi2);
     /*** Initialisations ***/
     /**
      * Initialise les 500 graines aléatoires
