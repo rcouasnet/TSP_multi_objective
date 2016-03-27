@@ -10,10 +10,12 @@
 #include <assert.h>
 // #include <ctime>
 #include <chrono>
+#include <list>
 
 #include "debug.h"
 
 #include "objective.h"
+#include "evaluation.h"
 #include "coordinates.h"
 
 #define NB_SEEDS	500
@@ -74,7 +76,15 @@ public:
     void offlineFilter();
     
     /**
-     * En chantier
+     * Propage la domination d'une évaluation sur le reste des non dominées :
+     * 	vérifie toutes les valeurs suivantes et les supprime si elles sont également dominées
+     * @param not_dominated les solutions sur lesquelles effectuer la propagation
+     * @param eval évaluation qui domine peut être les autres
+     * @param ind_begin emplacement du vecteur à partir duquel effectuer la propagation
+     */
+    static void spread(std::vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned ind_begin);
+    /**
+     * 
      */
     void onlineFilter();
   

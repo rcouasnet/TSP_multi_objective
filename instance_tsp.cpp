@@ -1,4 +1,5 @@
 #include "instance_tsp.h"
+#include <boost/concept_check.hpp>
 
 using namespace std;
 
@@ -75,7 +76,7 @@ void InstanceTsp::initEvaluation()
     cout << "Evaluation instance 2 : " << get_total_cost2() << endl;
 }
     
-bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const string& fileName)
+bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> not_dominated, const string& fileName)
 {
     ofstream file(fileName);
 
@@ -83,8 +84,8 @@ bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> notDominated, const str
         cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
         return false;
     }else{
-        for(unsigned i=0; i < notDominated.size(); ++i){
-            file << notDominated[i].col << " " << notDominated[i].row << endl;
+        for(unsigned i=0; i < not_dominated.size(); ++i){
+            file << not_dominated[i].col << " " << not_dominated[i].row << endl;
         }
     }
     return true;
@@ -96,8 +97,6 @@ void InstanceTsp::offlineFilter()
 {
     double result[500][2] = { { 0 } };
 
-    vector<int> p;
-
     for(unsigned i= 0; i < 500; ++i) {
         generatePath(i);
 	initEvaluation();
@@ -105,31 +104,31 @@ void InstanceTsp::offlineFilter()
 	result[i][1] = total_cost_2;
     }
 
-    vector<Coordinates> notDominated;
-    notDominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
+    vector<Coordinates> not_dominated;
+    not_dominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
 
     for(int k = 1; k < 500 ; ++k){
         unsigned l = 0;
         bool determined = false;
 
-        while(l < notDominated.size() && determined == false){
-            if( (result[k][0] > notDominated.at(l).col  && result[k][1] >notDominated.at(l).row )) {
+        while(l < not_dominated.size() && determined == false){
+            if( (result[k][0] > not_dominated.at(l).col  && result[k][1] >not_dominated.at(l).row )) {
 
                 determined = true;
 
-            }else if( result[k][0] < notDominated.at(l).col  && result[k][1] < notDominated.at(l).row ){
-                notDominated.at(l).col= result[k][0];
-                notDominated.at(l).row= result[k][1];
+            }else if( result[k][0] < not_dominated.at(l).col  && result[k][1] < not_dominated.at(l).row ){
+                not_dominated.at(l).col= result[k][0];
+                not_dominated.at(l).row= result[k][1];
 
                 vector<int> toDelete;
-                for(unsigned ind = l+1 ; ind < notDominated.size(); ++ind){
-                    if( (result[k][0] <  notDominated.at(ind).col && result[k][1] < notDominated.at(ind).row) ){
+                for(unsigned ind = l+1 ; ind < not_dominated.size(); ++ind){
+                    if( (result[k][0] <  not_dominated.at(ind).col && result[k][1] < not_dominated.at(ind).row) ){
                         toDelete.push_back(ind);
                     }
                 }
 
                 for(unsigned del=0; del < toDelete.size(); ++del){
-                    notDominated.erase(notDominated.begin()+toDelete.at(del)-del);
+                    not_dominated.erase(not_dominated.begin()+toDelete.at(del)-del);
                 }
                 determined = true;
 
@@ -139,7 +138,7 @@ void InstanceTsp::offlineFilter()
         }
 
         if(determined == false){
-            notDominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
+            not_dominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
         }
     }
     
@@ -159,81 +158,94 @@ void InstanceTsp::offlineFilter()
      }
  
      //offline500 Pareto
-     trySaveParetoToTxt(notDominated, "../data/results/offline500_Pareto_test.txt");
+     trySaveParetoToTxt(not_dominated, "../data/results/offline500_Pareto_test.txt");
 }
 
 
+void InstanceTsp::spread(vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned ind_begin)
+{
+    for(unsigned j = not_dominated.size() -1 ; j > ind_begin; ++j)
+    {
+	if( not_dominated[j]->is_dominated(*eval) ) {
+	    #if DEBUG_ONLINE
+		cout << "Suppression de l'élement à la place "<< j<< " des non dominés"<< endl;
+	    #endif
+	    not_dominated.erase(not_dominated.begin() + j);
+	}
+    }
+
+}
+
 void InstanceTsp::onlineFilter()
 {
-//     pair<double,double> currentSol;
-// 
-//     vector<pair<double,double> >nonDominated;
-// 
-//     string instName =   "results/online/online500_"+instanceName+".txt";
-//     ofstream file(instName);
-// 
-//     if(!file){
-//         cerr << "Erreur de création du fichier" << endl;
-//     }
-//     else{
-//         for(unsigned i=0; i < 500 ; ++i){
-// 	  
-//             generatePath(i);
-// 
-//             // Evaluating the path
-//             initEvaluation();
-// 
-//             // Writing current solution in file online500 ...
-//             file << total_cost_1<< " " << total_cost_2<< endl;
-// 
-//             // Testing the path with all the non-dominated ones
-//             unsigned m = 0;
-//             bool determined = false;
-// 
-//             while( m < nonDominated.size() && determined == false){
-//                 if( (total_cost_1 > nonDominated.at(m).first && total_cost_2 > nonDominated.at(m).second ) ){
-//                     determined = true;
-//                 }
-//                 else if( (total_cost_1 < nonDominated.at(m).first && total_cost_2 < nonDominated.at(m).second) ){
-//                     nonDominated.at(m).first = total_cost_1;
-//                     nonDominated.at(m).second = total_cost_2;
-// 
-//                     // Propagation
-//                     vector<int> toDelete;
-//                     for(unsigned ind = m+1 ; ind < nonDominated.size(); ++ind){
-//                         if( (total_cost_1 <  nonDominated.at(ind).first && total_cost_2 < nonDominated.at(ind).second) ){
-//                             toDelete.push_back(ind);
-//                         }
-//                     }
-//                     for(unsigned del=0; del < toDelete.size(); ++del){
-//                         nonDominated.erase(nonDominated.begin()+toDelete.at(del)-del);
-//                     }
-// 
-//                     // End of propagation
-//                     determined = true;
-//                 }
-//                 else{
-//                     ++m;
-//                 }
-//             }
-// 
-//             if(determined == false){
-//                 nonDominated.push_back(pair<double,double>(total_cost_1, total_cost_2));
-//             }
-//         }
-// 
-//         // Writing Pareto local front in onlinePareto500_instanceName.txt
-//         string paretoFileName = "results/online/onlinePareto500_"+instanceName+".txt";
-// 
-//         ofstream fileP(paretoFileName);
-// 
-//         if(!fileP){
-//             cerr << "Erreur de création de fichier" << endl;
-//         }else{
-//             for(unsigned j=0; j < nonDominated.size(); ++j){
-//                 fileP << nonDominated[j].first << " " << nonDominated[j].second << endl;
-//             }
-//         }
-//     }
+    vector< Evaluation* > not_dominated;
+    string instanceName= "TEMPORAIRE"; // TODO mettre dans la classe
+
+    string online_name =   "results/online/online500_"+instanceName+".txt";
+    ofstream file(online_name);
+
+    if(!file){
+        cerr << "Erreur de création du fichier" << endl;
+    }
+    else{
+	// Test des 500 solutions
+        for(unsigned num_sol= 0; num_sol < 500 ; ++num_sol){
+	    
+            generatePath(num_sol);
+            // Evaluating the path
+            initEvaluation();
+
+            // Writing current solution in file online500 ...
+            file << total_cost_1<< " " << total_cost_2<< endl;
+// 	    TODO Changer : mettre l'évaluation courante dans la classe
+	    Evaluation* tsp_evalulation= new Evaluation(total_cost_1, total_cost_2);
+
+            // Testing the path with all the non-dominated ones
+            unsigned indice = 0;
+            bool is_dominating= false;
+
+            while( indice < not_dominated.size() && !is_dominating){
+		Evaluation* current_eval= not_dominated[num_sol];
+		
+		// On vérifie que la solution n'est pas dominée
+                if( tsp_evalulation->is_dominated(*current_eval) ){
+                    is_dominating= true;
+                }
+                // Sinon, on regarde si elle domine
+                else if( current_eval->is_dominated(*tsp_evalulation) ){
+                    current_eval->set_obj1(total_cost_1);
+                    current_eval->set_obj2(total_cost_2);
+		    
+		    // Propagation
+		    spread(not_dominated, tsp_evalulation, indice);
+
+                    is_dominating= true;
+                }
+                else{
+                    ++indice;
+                }
+            }
+
+            if(!is_dominating){
+                not_dominated.push_back(tsp_evalulation);
+            }
+            else {
+		delete &tsp_evalulation;
+            }
+        }
+
+        // Writing Pareto local front in onlinePareto500_instanceName.txt
+        string paretoFileName = "results/online/onlinePareto500_"+instanceName+".txt";
+
+        ofstream fileP(paretoFileName);
+
+        if(!fileP){
+            cerr << "Erreur de création de fichier" << endl;
+        }else{
+            for(unsigned i=0; i < not_dominated.size(); ++i){
+                fileP << not_dominated[i]->get_val1() << " " << not_dominated[i]->get_val2() << endl;
+            }
+        }
+    }
 }
 

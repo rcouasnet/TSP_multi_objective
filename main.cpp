@@ -23,16 +23,13 @@ int main(int argc, char **argv) {
 #endif
   }
   
-  InstanceTsp *t1 = new InstanceTsp(File_A, File_B);
-  t1->initSeeds();
-  t1->initBothCostMatrices();
+  InstanceTsp *tsp = new InstanceTsp(File_A, File_B);
+  tsp->initSeeds();
+  tsp->initBothCostMatrices();
   
-  t1->offlineFilter();
+  tsp->offlineFilter();
   
+//   tsp->trySaveParetoToTxt(not_dominated"../data/results/nomfic_test_pareto.txt");
   
-  cout << "< ! Test ! >";
-  i1.trySaveToTxt("../data/results/500_krA100.tsp");
-  cout << "</ ! Test ! >";
-
   return 0;
 }

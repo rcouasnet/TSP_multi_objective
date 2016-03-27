@@ -6,8 +6,9 @@
 
 // tsp
 #define DEBUG_EVAL		0
+#define DEBUG_ONLINE		1
 
-// instance
+// objective
 #define DEBUG_LOAD_FILE		0
 #define DEBUG_MAT_DIST		0
 
