@@ -71,7 +71,7 @@ public:
      * @param fileName : chemin du fichier
      * @return false si le fichier ne peut pas être crée
      */
-    bool trySaveParetoToTxt(std::vector<Coordinates> notDominated, const std::string& fileName);
+    bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string& fileName) const;
     
     void offlineFilter();
     

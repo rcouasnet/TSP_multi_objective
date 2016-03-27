@@ -76,7 +76,7 @@ void InstanceTsp::initEvaluation()
     cout << "Evaluation instance 2 : " << get_total_cost2() << endl;
 }
     
-bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> not_dominated, const string& fileName)
+bool InstanceTsp::trySaveParetoToTxt(vector< Evaluation*>& notDominated, const string& fileName) const
 {
     ofstream file(fileName);
 
@@ -84,8 +84,8 @@ bool InstanceTsp::trySaveParetoToTxt(vector<Coordinates> not_dominated, const st
         cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
         return false;
     }else{
-        for(unsigned i=0; i < not_dominated.size(); ++i){
-            file << not_dominated[i].col << " " << not_dominated[i].row << endl;
+        for(const Evaluation* eval : notDominated){
+            file << eval->get_val1()<< " " << eval->get_val2() << endl;
         }
     }
     return true;
@@ -104,41 +104,43 @@ void InstanceTsp::offlineFilter()
 	result[i][1] = total_cost_2;
     }
 
-    vector<Coordinates> not_dominated;
-    not_dominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
+    vector<Evaluation*> not_dominated;
+    not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
 
     for(int k = 1; k < 500 ; ++k){
-        unsigned l = 0;
+        unsigned num_eval = 0;
         bool determined = false;
 
-        while(l < not_dominated.size() && determined == false){
-            if( (result[k][0] > not_dominated.at(l).col  && result[k][1] >not_dominated.at(l).row )) {
+        while(num_eval < not_dominated.size() && !determined){
+	    Evaluation* current_eval= not_dominated[num_eval];
+	    
+            if( result[k][0] > current_eval->get_val1() 
+		    && result[k][1] >current_eval->get_val2() ) {
 
                 determined = true;
 
-            }else if( result[k][0] < not_dominated.at(l).col  && result[k][1] < not_dominated.at(l).row ){
-                not_dominated.at(l).col= result[k][0];
-                not_dominated.at(l).row= result[k][1];
+            }else if( result[k][0] < current_eval->get_val1()
+			&& result[k][1] < current_eval->get_val2() ){
+                current_eval->set_obj1(result[k][0]);
+                current_eval->set_obj2(result[k][1]);
 
                 vector<int> toDelete;
-                for(unsigned ind = l+1 ; ind < not_dominated.size(); ++ind){
-                    if( (result[k][0] <  not_dominated.at(ind).col && result[k][1] < not_dominated.at(ind).row) ){
-                        toDelete.push_back(ind);
+                for(unsigned j= not_dominated.size() -1 ; j > num_eval+1; ++j){
+                    if( result[k][0] <  current_eval->get_val1()
+			    && result[k][1] < current_eval->get_val2() ){
+			not_dominated.erase(not_dominated.begin() + j);
                     }
                 }
-
-                for(unsigned del=0; del < toDelete.size(); ++del){
-                    not_dominated.erase(not_dominated.begin()+toDelete.at(del)-del);
-                }
+                
                 determined = true;
 
             }else{
-                ++l;
+                ++num_eval;
             }
         }
 
         if(determined == false){
-            not_dominated.push_back(*(new Coordinates(result[0][0], result[0][1])));
+            not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
         }
     }
     
@@ -189,9 +191,9 @@ void InstanceTsp::onlineFilter()
     }
     else{
 	// Test des 500 solutions
-        for(unsigned num_sol= 0; num_sol < 500 ; ++num_sol){
+        for(unsigned num_eval= 0; num_eval < 500 ; ++num_eval){
 	    
-            generatePath(num_sol);
+            generatePath(num_eval);
             // Evaluating the path
             initEvaluation();
 
@@ -205,7 +207,7 @@ void InstanceTsp::onlineFilter()
             bool is_dominating= false;
 
             while( indice < not_dominated.size() && !is_dominating){
-		Evaluation* current_eval= not_dominated[num_sol];
+		Evaluation* current_eval= not_dominated[num_eval];
 		
 		// On vérifie que la solution n'est pas dominée
                 if( tsp_evalulation->is_dominated(*current_eval) ){
