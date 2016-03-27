@@ -32,7 +32,9 @@ public:
     /*** Initialisations ***/
     /**
      * Initialise les 500 graines aléatoires
-     * TODO pour l'instant, elles sont initialisée à 0, à changer
+     * TODO pour l'instant, elles sont initialisée à 0, à changer, dans le sujet : 
+     * "assurez-vous d'utiliser les mêmes graines aléatoires pour vos tests. Ainsi les fronts
+     * obtenus obtenus doivent être identiques"
      */
     void initSeeds();
     /**
@@ -57,7 +59,7 @@ public:
      * Sauvegarde du front Pareto
      * @param fileName : chemin du fichier
      * @return false si le fichier ne peut pas être crée
-     * TODO
+     * TODO créer trySaveParetoToTxt dans le cpp
      */
     bool trySaveParetoToTxt(std::vector<Coordinates> notDominated, const std::string& fileName);
     
