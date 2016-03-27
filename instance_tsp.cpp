@@ -157,18 +157,7 @@ void InstanceTsp::offlineFilter()
             file1 << result[i][0] << " " << result[i][1] << endl;
          }
      }
-     
-     //offline500_pareto
-    string fileName =   "../data/results/offlinePareto500_test.txt";
-     ofstream file2(fileName);
-
-    if(!file2.is_open()){
-        cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
-    }else{
-        for(unsigned j=0; j < notDominated.size(); ++j){
-            file2 << notDominated.at(j).getCol() << " " << notDominated.at(j).getRow() << endl;
-        }
-    }
  
-//       trySaveParetoToTxt(notDominated, "../data/results/offline500_Pareto_test.txt");
+     //offline500 Pareto
+     trySaveParetoToTxt(notDominated, "../data/results/offline500_Pareto_test.txt");
 }
