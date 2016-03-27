@@ -41,3 +41,4 @@ cmake_multi-objectif
 tsp_mo/
 tsp_mo.tar.gz
 tsp_multi-objectif
+data/results/*
