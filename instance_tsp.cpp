@@ -23,7 +23,14 @@ void InstanceTsp::initSeeds()
     }
 }
 
-void InstanceTsp::initPath(unsigned int seed_num)
+void InstanceTsp::initBothCostMatrices()
+{
+    // Initialisation des matrices de distance
+    obj1->setMatriceDistance();
+    obj2->setMatriceDistance();
+}
+
+void InstanceTsp::generatePath(unsigned seed_num)
 {
 // Les instances doivent avoir le même nombre de villes
     
@@ -35,7 +42,7 @@ void InstanceTsp::initPath(unsigned int seed_num)
     for(unsigned i = 1; i <= obj1->get_nbcities(); ++i){
         path[i]= i;
     }
-
+    
     assert(seed_num < NB_SEEDS);
     
     // On mélange l'ordre du chemin
@@ -46,11 +53,8 @@ void InstanceTsp::initPath(unsigned int seed_num)
 }
 
 
-void InstanceTsp::initEvaluation(){
-    // Initialisation des matrices de distance
-    obj1->setMatriceDistance();
-    obj2->setMatriceDistance();
-        
+void InstanceTsp::initEvaluation()
+{        
     // Cout de deplacement entre la dernière ville et la première
     set_total_cost1( obj1->get_distance(obj1->get_nbcities(), 1) );
     set_total_cost2( obj2->get_distance(obj2->get_nbcities(), 1) );
@@ -95,8 +99,8 @@ void InstanceTsp::offlineFilter()
 
     vector<int> p;
 
-    for(int i=0; i < 500; ++i){
-        initPath(seeds[i]);
+    for(unsigned i= 0; i < 500; ++i) {
+        generatePath(i);
 	initEvaluation();
 	result[i][0] = total_cost_1;
 	result[i][1] = total_cost_2;

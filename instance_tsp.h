@@ -34,16 +34,18 @@ public:
     /*** Initialisations ***/
     /**
      * Initialise les 500 graines aléatoires
-     * TODO pour l'instant, elles sont initialisée à 0, à changer, dans le sujet : 
-     * "assurez-vous d'utiliser les mêmes graines aléatoires pour vos tests. Ainsi les fronts
-     * obtenus obtenus doivent être identiques"
+     * TODO pour l'instant, elles sont initialisée à 0 (sauf la première), à changer,
+     * dans le sujet : "assurez-vous d'utiliser les mêmes graines aléatoires pour vos tests.
+     * Ainsi les fronts obtenus obtenus doivent être identiques"
      */
     void initSeeds();
+    
+    void initBothCostMatrices();
     /**
      * Crée un parcours aléatoire à partir d'une graine aléatoire
      * @param random_seed graine aléatoire utilisée
      */
-    void initPath(unsigned seed_num);
+    void generatePath(unsigned seed_num);
     /**
      * Calcule le cout total de chaque objectif
      * @SEE voir si le calcul des matrices de distance se fait en dehors de la méthode
