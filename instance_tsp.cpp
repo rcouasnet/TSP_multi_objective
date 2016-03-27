@@ -14,8 +14,12 @@ InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
 
 void InstanceTsp::initSeeds()
 {
-    for(int i = 0; i < NB_SEEDS; ++i){ 
-	seeds[i] = 0;
+    // obtain a time-based seed:
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    seeds[0]= seed;
+    
+    for(unsigned i = 1; i < NB_SEEDS; ++i){ 
+	seeds[i] = i;
     }
 }
 
