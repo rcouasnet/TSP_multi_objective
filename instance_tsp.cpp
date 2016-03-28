@@ -189,11 +189,11 @@ string InstanceTsp::formInstanceName(const string& File_A, const string& File_B)
      return instanceName;
 }
 
-void InstanceTsp::Permutation(Coordinates p){
-
-  int aux = path.at(p.getCol());
-  path.at(p.getCol()) = path.at(p.getRow());
-  path.at(p.getRow()) = aux;
+void InstanceTsp::Permutation(int p1, int p2)
+{
+  int aux = path.at(p1);
+  path.at(p1) = path.at(p2);
+  path.at(p2) = aux;
 }
 
 void InstanceTsp::offlineFilter()
@@ -427,7 +427,7 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	    for(int k = 0; k < (int)permut.size(); ++k)
 	    {
 		neighboor = *active;
-		neighboor.Permutation(permut.at(k));
+		neighboor.Permutation(permut.at(k).getCol(), permut.at(k).getRow());
 		neighboor.initEvaluation();
 		
 		unsigned t = 0;
