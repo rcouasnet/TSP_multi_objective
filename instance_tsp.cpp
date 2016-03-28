@@ -1,11 +1,15 @@
 #include "instance_tsp.h"
 #include <boost/concept_check.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
 
 using namespace std;
 
 InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
    total_cost_1(-1), total_cost_2(-1)
 {
+  
+  File_1 = fobj1;
+  File_2 = fobj2;
   
   instance_name = formInstanceName(fobj1, fobj2);
   
@@ -137,6 +141,13 @@ string InstanceTsp::formInstanceName(const string& File_A, const string& File_B)
      string instanceName = fileName_A.substr(0,4)+fileName_B.substr(3,1)+
                         fileName_A.substr(4,fileName_A.size()-4);
      return instanceName;
+}
+
+void InstanceTsp::Permutation(Coordinates p){
+
+  int aux = path.at(p.getCol());
+  path.at(p.getCol()) = path.at(p.getRow());
+  path.at(p.getRow()) = aux;
 }
 
 void InstanceTsp::offlineFilter()
@@ -298,3 +309,110 @@ void InstanceTsp::onlineFilter()
     }
 }
 
+
+void InstanceTsp::mSTP(unsigned nb_iteration)
+{    
+    vector<InstanceTsp> not_determined;
+    InstanceTsp *active = new InstanceTsp(getFile1(), getFile2());
+    InstanceTsp neighboor(getFile1(), getFile2());
+    
+    string instanceName =  "../data/results/global_pareto_"+active->getInstanceName()+".txt";
+    ofstream file(instanceName);
+
+    // Calcul de l'ensemble des permutations possibles pour une instance	
+    vector<Coordinates> permut;
+    for(unsigned i=0; i < active->getFirstObjective()->get_nbcities(); ++i){
+	for(unsigned j= i; j < active->getSecondObjective()->get_nbcities(); ++j){
+	    permut.push_back(*(new Coordinates(i, j)));
+	}
+    }
+    
+    for(unsigned i = 0 ; i < nb_iteration ; ++ i)
+    {
+	unsigned nb_evaluation = 0;	
+	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
+	not_determined.empty();
+	
+	size_t s = chrono::system_clock::now().time_since_epoch().count();
+	
+	active->generatePath(s);
+	active->initEvaluation();
+	
+	not_determined.push_back(*active);
+	unsigned p = 0;
+	
+	while(p < not_determined.size() )
+	{  
+	    *active = not_determined.at(p);	
+	    active->initEvaluation();
+	    
+	    for(int k = 0; k < (int)permut.size(); ++k)
+	    {
+		neighboor = *active;
+		neighboor.Permutation(permut.at(k));
+		neighboor.initEvaluation();
+		
+		unsigned t = 0;
+		bool deter = false;
+		
+		while( t < not_determined.size() && deter == false)
+		{
+		    ++nb_evaluation;
+		    not_determined[t].initEvaluation();
+		    
+		    if(neighboor.get_total_cost1() > not_determined[t].get_total_cost1() && neighboor.get_total_cost2() > not_determined[t].get_total_cost2())
+		    {
+			deter = true;
+		    }
+		    else if(neighboor.get_total_cost1() < not_determined[t].get_total_cost1() && neighboor.get_total_cost2() < not_determined[t].get_total_cost2())
+		    { 
+			  not_determined.at(t) = neighboor;
+			  // Propagation
+			  vector<int> toDelete;
+			  for(unsigned ind = t+1 ; ind < not_determined.size(); ++ind){
+			    
+			      if(neighboor.get_total_cost2() <  not_determined[ind].get_total_cost1() && neighboor.get_total_cost2() < not_determined[ind].get_total_cost2()){
+				  toDelete.push_back(ind);
+			      }
+			  }
+			  for(unsigned del = 0; del < toDelete.size(); ++del){
+			      not_determined.erase(not_determined.begin()+toDelete[del]-del);
+			  }
+
+			  deter = true; 		  
+		    }else{
+			++t;		  
+		    }	      
+		
+		}
+		
+		if(deter == false){
+		    not_determined.push_back(neighboor);
+		}
+	  
+	    }
+	    
+	    ++p;
+	}
+	
+	chrono::high_resolution_clock::time_point fin = chrono::high_resolution_clock::now();	// Timer fin
+		
+	auto duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
+
+	if(!file){
+	    cerr << "Erreur lors de la lecture ou création du fichier" << endl;
+	}
+	else
+	{
+	    file << "Nombre d'itération : " << i << endl;
+	    file << "Temps d'exécution : " << duration*1000000 << " secondes" << endl;
+	    file << "Nombre d'évaluations : "<< nb_evaluation << endl;
+	    for(unsigned l=0; l < not_determined.size(); ++l)
+	    {
+		file << not_determined[l].get_total_cost1() << " " << not_determined[l].get_total_cost2() << endl;
+	    }
+
+	    cout << "Ecriture terminé" << endl;
+	}     
+    }
+}

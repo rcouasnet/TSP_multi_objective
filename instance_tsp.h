@@ -24,6 +24,7 @@ class InstanceTsp
 {
 private:
     Objective *obj1, *obj2;
+    std::string File_1, File_2;
     std::string instance_name;
     double total_cost_1, total_cost_2;
     
@@ -46,6 +47,8 @@ public:
      */
     void initBothCostMatrices();
     
+    void mSTP(unsigned nb_iteration);
+    
 private:
     /**
      * Crée un parcours aléatoire à partir d'une graine aléatoire
@@ -61,8 +64,12 @@ private:
 public:
     
     /*** Getters ***/
+    Objective* getFirstObjective(){ return obj1; }
+    Objective* getSecondObjective(){ return obj2; }
     double get_total_cost1(){	return total_cost_1;  }
     double get_total_cost2(){	return total_cost_2;  }
+    std::string getFile1(){	return File_1;  }
+    std::string getFile2(){	return File_2;  }
     std::string getInstanceName(){	return instance_name;  }
     /** Setters ***/
     void set_total_cost1(double cost){	total_cost_1 = cost;  }
@@ -97,6 +104,8 @@ public:
     std::string splitFileName(const std::string &str);
     
     std::string formInstanceName(const std::string &File_A, const std::string &File_B);
+    
+    void Permutation(Coordinates p);
     
      /**
      * 
