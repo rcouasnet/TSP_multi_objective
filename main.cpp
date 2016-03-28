@@ -5,10 +5,9 @@
 
 
 using namespace std;
-
-
-int main(int argc, char **argv) {
-/* MAIN FONCTIONNEL MAIS PAS PRATIQUE POUR TEST
+void launch_menu(int argc, char** argv)
+{
+    /* MAIN FONCTIONNEL MAIS PAS PRATIQUE POUR TEST
  * A RETIRER AVANT D'ENVOYER
  
   Objective i1, i2;
@@ -58,6 +57,9 @@ int main(int argc, char **argv) {
     
     
   }*/
+}
+
+int main(int argc, char **argv) {
 
   Objective i1, i2;
   std::string File_A = "../data/kroA100.tsp";
@@ -82,7 +84,11 @@ int main(int argc, char **argv) {
   //tsp->offlineFilter();
   //tsp->onlineFilter();
     
+<<<<<<< HEAD
   tsp->mTSP(100);
+=======
+ tsp->mTSP(0);
+>>>>>>> 389071ea865ed9c2b4afd6ff442df03fbf366fc7
   
   return 0;
 }
