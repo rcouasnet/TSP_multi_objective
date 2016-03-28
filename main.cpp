@@ -84,12 +84,7 @@ int main(int argc, char **argv) {
   //tsp->offlineFilter();
   //tsp->onlineFilter();
     
-<<<<<<< HEAD
   tsp->mTSP(100);
-=======
- tsp->mTSP(0);
->>>>>>> 389071ea865ed9c2b4afd6ff442df03fbf366fc7
-  
   return 0;
 }
 

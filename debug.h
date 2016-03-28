@@ -11,7 +11,7 @@
 
 // objective
 #define DEBUG_LOAD_FILE		0
-#define DEBUG_MAT_DIST		0
+#define DEBUG_MAT_DIST		1
 
 
 #endif

@@ -62,7 +62,7 @@ double Objective::calcDistance(const Coordinates& A, const Coordinates& B)
     return sqrt(pow(A.col - B.col, 2) + pow(A.row - B.row, 2));
 }
 
-double Objective::calcDistance(double ind_A, double ind_B)
+double Objective::calcDistance(int ind_A, int ind_B)
 {
     return calcDistance(cities_positions[ind_A], cities_positions[ind_B]);
 }
@@ -88,13 +88,16 @@ void Objective::setMatriceDistance()
     #endif
 }
 
-float Objective::get_distance(double ind_A, double ind_B) const
+float Objective::get_distance(int ind_A, int ind_B) const
 {
     #if DEBUG_MAT_DIST
 	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
 	assert(ind_A > 0 && ind_A <= nb_cities);
 	assert(ind_B > 0 && ind_B <= nb_cities);
+	
+	cout << "taille mat distance : "<< cost_matrice.size() << " sur "<< cost_matrice[1].size()<< endl;
     #endif
+	
     return cost_matrice[ind_A][ind_B];
 }
 

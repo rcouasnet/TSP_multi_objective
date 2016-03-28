@@ -20,6 +20,8 @@
 #include "coordinates.h"
 
 #define NB_SEEDS	500
+// #define NDEBUG  // pour enlever les assert()
+
 
 class InstanceTsp
 {
