@@ -187,10 +187,10 @@ void InstanceTsp::offlineFilter()
             }else if( result[k][0] < current_eval->get_val1()
 		    && result[k][1] < current_eval->get_val2() ){
 		
-		clog << "Propagation" << endl;
                 current_eval->set_obj1(result[k][0]);
                 current_eval->set_obj2(result[k][1]);
 
+		clog << "Propagation" << endl;
 		// Propagation
                 vector<int> toDelete;
                 for(unsigned j= not_dominated.size() -1 ; j > num_eval; --j){
@@ -218,23 +218,30 @@ void InstanceTsp::offlineFilter()
 }
 
 
-void InstanceTsp::spread(vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned ind_begin)
+int InstanceTsp::spread(vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned ind_begin)
 {
+    int nb_deleted= 0;
+    #if DEBUG_ONLINE
+	cout << "Propagation de la solution dominante"<< endl;
+    #endif
     for(unsigned j = not_dominated.size() -1 ; j > ind_begin; ++j)
     {
 	if( not_dominated[j]->is_dominated(*eval) ) {
+	    ++nb_deleted;
 	    #if DEBUG_ONLINE
 		cout << "Suppression de l'élement à la place "<< j<< " des non dominés"<< endl;
 	    #endif
 	    not_dominated.erase(not_dominated.begin() + j);
 	}
     }
-
+    
+    return nb_deleted;
 }
 
 void InstanceTsp::onlineFilter()
 {
     vector< Evaluation* > not_dominated;
+    Evaluation* tsp_evaluation= NULL;
     
     string online_name =   "../data/results/online500_"+getInstanceName()+".txt";
     ofstream file(online_name);
@@ -243,58 +250,66 @@ void InstanceTsp::onlineFilter()
         cerr << "Erreur de création du fichier d'enregistrement" << endl;
     }
     else{
-	// Test des 500 solutions
-        for(unsigned num_eval= 0; num_eval < 500 ; ++num_eval){
+	// Test de toutes les solutions
+        for(unsigned num_sol= 0; num_sol < NB_SEEDS ; ++num_sol){
 	    
-            generatePath(num_eval);
+            generatePath(num_sol);
             // Evaluation du chemin
             initEvaluation();
 
             // Sauvegarde de la solution courante dans le fichier
             file << total_cost_1<< " " << total_cost_2<< endl;
 // 	    TODO Changer : mettre l'évaluation courante dans la classe
-	    Evaluation* tsp_evaluation = new Evaluation(total_cost_1, total_cost_2);
+	    tsp_evaluation= new Evaluation(total_cost_1, total_cost_2);
+	    
+	    cout << "Eval tsp : "<< tsp_evaluation->get_val1()<< " ; "<< tsp_evaluation->get_val2()<< endl;
 
+	    clog<< "nombre non dominées : "<< not_dominated.size()<< endl;
+	    
             // Test du chemin avec tous les non-dominés
-            unsigned indice = 0;
-            bool is_determined= false;
-
-	    unsigned size_not_dominated= not_dominated.size();
-	    cout << "nombre non dominés : "<< size_not_dominated<< endl;
-            while( indice < not_dominated.size() && !is_determined){
-		Evaluation* current_eval= not_dominated[num_eval];
+	    bool is_dominated= false; // Si la solution domine une autre, on s'arrête
+	    bool is_dominating= false; // Si la solution ou est dominée, on s'arrête
+            unsigned ind_nondominated = 0;
+            while( ind_nondominated < not_dominated.size() && !is_dominated && !is_dominating){
+		Evaluation* current_eval= not_dominated[ind_nondominated];
 		
 		// On vérifie que la solution n'est pas dominée
                 if( tsp_evaluation->is_dominated(*current_eval) ){
-                    is_determined= true;
-                }
+		    is_dominated= true;
+		    #if DEBUG_ONLINE
+			cout << "La solution est dominée par une autre évaluation"<< endl;
+		    #endif
+		}
                 // Sinon, on regarde si elle domine
                 else if( current_eval->is_dominated(*tsp_evaluation) ){
-                    current_eval->set_obj1(total_cost_1);
-                    current_eval->set_obj2(total_cost_2);
-		    
-		    // Propagation
-		    spread(not_dominated, tsp_evaluation, indice);
-
-                    is_determined= true;
+		    // C'est le cas : Propagation
+		    is_dominating= true;
+		    #if DEBUG_ONLINE
+			cout << "La solution domine une autre évaluation, propagation"<< endl;
+		    #endif
+		    ind_nondominated -= spread(not_dominated, tsp_evaluation, ind_nondominated -1);
                 }
                 // Sinon, c'est qu'aucune des 2 ne domine l'autre, on garde les 2, 
-                //	et on vérifie avec la suivante
+                //	et on vérifie avec la non-dominée suivante
                 else{
-                    ++indice;
+                    ++ind_nondominated;
+		    #if DEBUG_ONLINE
+			cout << "Aucune des 2 ne domine, on passe à la suite"<< endl;
+		    #endif
                 }
             }
-
-            if(!is_determined){
-                not_dominated.push_back(tsp_evaluation);
-            }
-            else {
-// 		delete &tsp_evalulation;
-            }
+            // Si la solution n'est dominée par aucune autre, on l'ajoute
+            if (!is_dominated) {
+		not_dominated.push_back(tsp_evaluation);
+		#if DEBUG_ONLINE
+		    cout << "La solution n'est dominée par aucune autre évaluation,"
+		    "ajout dans les non dominées"<< endl<< endl;
+		#endif
+	    }
+	    else { delete tsp_evaluation; }
         }
 
         // Enregistrement du front Pareto dans un fichier
 	trySaveOnlineParetoToTxt(not_dominated);
     }
 }
-
