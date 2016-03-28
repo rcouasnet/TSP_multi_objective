@@ -25,14 +25,15 @@ int main(int argc, char **argv) {
   
   InstanceTsp *tsp = new InstanceTsp(File_A, File_B);
   tsp->initSeeds();
-  tsp->initBothCostMatrices();
+  tsp->setBothCostMatrices();
   
- // tsp->offlineFilter();
-  //tsp->onlineFilter();
+//  tsp->offlineFilter();
+  tsp->onlineFilter();
   
   std::cout << tsp->getInstanceName() << std::endl;  
   
- tsp->mTSP(50);
+//  tsp->mTSP(50);
   
   return 0;
 }
+
