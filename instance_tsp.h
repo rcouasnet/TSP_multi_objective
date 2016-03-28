@@ -49,10 +49,19 @@ public:
         
 private:
     /**
-     * Crée un parcours aléatoire à partir d'une graine aléatoire
-     * @param random_seed graine aléatoire utilisée
+     * Initialise le chemin: de 1 à nombre-de-villes
+     */
+    void initPath();
+    /**
+     * Crée un parcours aléatoire à partir d'une graine aléatoire du vecteur de graines
+     * @param seed_num graine aléatoire utilisée
      */
     void generatePath(unsigned seed_num);
+    /**
+     * Crée un parcours aléatoire à partir d'une graine aléatoire en générée
+     * 	(à partir de la "date 0")
+     */
+    void generatePath();
     /**
      * Calcule le cout total de chaque objectif
      * @SEE voir si le calcul des matrices de distance se fait en dehors de la méthode

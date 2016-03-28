@@ -42,10 +42,10 @@ void InstanceTsp::initBothCostMatrices()
     obj1->setMatriceDistance();
     obj2->setMatriceDistance();
 }
-    
-void InstanceTsp::generatePath(unsigned seed_num)
+ 
+void InstanceTsp::initPath()
 {
-// Les instances doivent avoir le même nombre de villes
+    // Les instances doivent avoir le même nombre de villes
     
     // On initialise le chemin : la position dans le chemin est identique
     //	à la position dans l'instance pour l'instant
@@ -55,16 +55,34 @@ void InstanceTsp::generatePath(unsigned seed_num)
     for(unsigned i = 1; i <= obj1->get_nbcities(); ++i){
         path[i]= i;
     }
+}
+ 
+void InstanceTsp::generatePath(unsigned seed_num)
+{
+    initPath();
     
-   assert(seed_num < NB_SEEDS);
+    assert(seed_num < NB_SEEDS);
     
-    // On mélange l'ordre du chemin
+    // On mélange l'ordre du chemin avec un graine déjà crée
     // On ne doit pas mélanger la première case avec les autres ! d'où le ++
     shuffle(++(path.begin()),path.end(),std::default_random_engine(seeds[seed_num]));
     
     assert(path[0] == -1);
 }
 
+void InstanceTsp::generatePath()
+{
+    initPath();
+    clog << "je ne dois être utilisé que dans le mTSP"<< endl;
+    
+    size_t random_seed = chrono::system_clock::now().time_since_epoch().count();
+    
+    // On mélange l'ordre du chemin
+    // On ne doit pas mélanger la première case avec les autres ! d'où le ++
+    shuffle(++(path.begin()),path.end(),std::default_random_engine(random_seed));
+    
+    assert(path[0] == -1);
+}
 
 void InstanceTsp::initEvaluation()
 {        
@@ -392,11 +410,10 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
     {
 	unsigned nb_evaluation = 0;	
 	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
-	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
+// 	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
+	not_determined.clear();
 	
-	size_t s = chrono::system_clock::now().time_since_epoch().count();
-	
-	active->generatePath(s);
+	active->generatePath();
 	active->initEvaluation();
 	
 	not_determined.push_back(*active);
