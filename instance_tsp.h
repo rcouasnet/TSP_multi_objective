@@ -59,9 +59,9 @@ private:
      */
     void initEvaluation();
     
+/*** Getters ***/
+
 public:
-    
-    /*** Getters ***/
     Objective* getFirstObjective(){ return obj1; }
     Objective* getSecondObjective(){ return obj2; }
     double get_total_cost1(){	return total_cost_1;  }
@@ -69,11 +69,22 @@ public:
     std::string getFile1(){	return File_1;  }
     std::string getFile2(){	return File_2;  }
     std::string getInstanceName(){	return instance_name;  }
-    /** Setters ***/
+    
+/** Setters ***/
     void set_total_cost1(double cost){	total_cost_1 = cost;  }
     void set_total_cost2(double cost){	total_cost_2 = cost;  }
     
+/*** Sauvegardes ***/
+
+private:
+    /**
+     * Sauvegarde du front Pareto
+     * @param fileName : chemin du fichier
+     * @return false si le fichier ne peut pas être crée
+     */
+    bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string fileName) const;
     
+public:
     /**
      * Sauvegarde du front Pareto offline
      * @return false si le fichier ne peut pas être crée
@@ -85,15 +96,10 @@ public:
      * @return false si le fichier ne peut pas être crée
      */
     bool trySaveOnlineParetoToTxt(std::vector< Evaluation* >& notDominated) const;
-private:
-    /**
-     * Sauvegarde du front Pareto
-     * @param fileName : chemin du fichier
-     * @return false si le fichier ne peut pas être crée
-     */
-    bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string fileName) const;
     
-public:
+    bool trySavemTSP(std::vector< InstanceTsp >& instances, long int duration, int nb_iterations, int nbEvaluations);
+    
+/*** Fonctions utiles ***/
      /**
      * Découpe la chaîne du chemin du fichier pour retourner le nom du fichier seulement
      * @param str : chemin du fichier
@@ -110,6 +116,7 @@ public:
     
     void Permutation(Coordinates p);
     
+/*** Filtrages ***/
      /**
      * Filtre offline
      */

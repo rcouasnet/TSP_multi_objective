@@ -125,6 +125,34 @@ bool InstanceTsp::trySaveParetoToTxt(vector< Evaluation*>& notDominated, const s
     return true;
 }
 
+bool InstanceTsp::trySavemTSP(vector<InstanceTsp>& instances, long duration, int nbIterations, int nbEvaluations)
+{
+    ostringstream oss;
+    oss << "../data/results/global_pareto_"<< nbIterations<< "_"<< instances[0].getInstanceName() +".txt";
+    string instanceName = oss.str();
+    ofstream file(instanceName);
+
+    if(!file){
+	cerr << "Erreur lors de la création du fichier de sauvegarde" << endl;
+	return true;
+    }
+    else
+    {
+	file << "Nombre d'itération : " << nbIterations << endl;
+	file << "Temps d'exécution : " << duration*1000000 << " secondes" << endl;
+	file << "Nombre d'évaluations : "<< nbEvaluations << endl;
+	for(unsigned l=0; l < instances.size(); ++l)
+	{
+	    file << instances[l].get_total_cost1() << " " << instances[l].get_total_cost2() << endl;
+	}
+
+	cout << "Ecriture terminé" << endl;
+	
+	return true;
+    }
+}
+
+
 string InstanceTsp::splitFileName(const string &str)
 {
     size_t f = str.find_last_of("/\\");
@@ -325,15 +353,31 @@ void InstanceTsp::onlineFilter()
     }
 }
 
+/***
+continue <- vrai
+init (A) // aléatoirement
+
+Tant_que continue faire :
+	choisir x € A
+	choisir x' € N(x) // N(x) : voisin, ... si tout N(x) est exploré, marquer x
+	A <- A Union {x'}
+	filtrer A (on line)
+	|  si toute solution de A est marquée, alors
+	|  continuer <- faux
+
+fin_Tantque
+retourner A
+*/
+
+// Voisinage : échanger 2 valeur et inverser l'ordre des valeurs entre les 2
+	
+	
 
 void InstanceTsp::mTSP(unsigned nb_iteration)
 {    
     vector<InstanceTsp> not_determined;
     InstanceTsp *active = new InstanceTsp(getFile1(), getFile2());
     InstanceTsp neighboor(getFile1(), getFile2());
-    
-    string instanceName =  "../data/results/global_pareto_"+active->getInstanceName()+".txt";
-    ofstream file(instanceName);
 
     // Calcul de l'ensemble des permutations possibles pour une instance	
     vector<Coordinates> permut;
@@ -343,11 +387,12 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	}
     }
     
+    // On effectue le nombre d'itérations demandés
     for(unsigned i = 0 ; i < nb_iteration ; ++ i)
     {
 	unsigned nb_evaluation = 0;	
 	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
-	not_determined.empty();
+	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
 	
 	size_t s = chrono::system_clock::now().time_since_epoch().count();
 	
@@ -355,11 +400,11 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	active->initEvaluation();
 	
 	not_determined.push_back(*active);
-	unsigned p = 0;
+	unsigned num_instance = 0;
 	
-	while(p < not_determined.size() )
+	while(num_instance < not_determined.size() )
 	{  
-	    *active = not_determined.at(p);	
+	    *active = not_determined[num_instance];	
 	    active->initEvaluation();
 	    
 	    for(int k = 0; k < (int)permut.size(); ++k)
@@ -408,27 +453,12 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	  
 	    }
 	    
-	    ++p;
+	    ++num_instance;
 	}
 	
 	chrono::high_resolution_clock::time_point fin = chrono::high_resolution_clock::now();	// Timer fin
-		
-	auto duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
+	long duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
 
-	if(!file){
-	    cerr << "Erreur lors de la lecture ou création du fichier" << endl;
-	}
-	else
-	{
-	    file << "Nombre d'itération : " << i << endl;
-	    file << "Temps d'exécution : " << duration*1000000 << " secondes" << endl;
-	    file << "Nombre d'évaluations : "<< nb_evaluation << endl;
-	    for(unsigned l=0; l < not_determined.size(); ++l)
-	    {
-		file << not_determined[l].get_total_cost1() << " " << not_determined[l].get_total_cost2() << endl;
-	    }
-
-	    cout << "Ecriture terminé" << endl;
-	}     
+	trySavemTSP(not_determined, duration, nb_evaluation, nb_iteration);
     }
 }
