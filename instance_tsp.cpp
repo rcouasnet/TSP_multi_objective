@@ -32,17 +32,11 @@ InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
 
 void InstanceTsp::initSeeds()
 {
-    // obtain a time-based seed:
-//     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-//     seeds[0]= seed;
-    
-//     for(unsigned i = 0; i < NB_SEEDS; ++i){ 
-// 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-// 	seeds[i] = seed;
-//     }
+    // Graine aléatoire random (on pourrait mettre i pour avoir tout le temps les même solutions)
     
     for(unsigned i = 0; i < NB_SEEDS; ++i){ 
-	seeds[i] = std::chrono::system_clock::now().time_since_epoch().count();
+	seeds[i]= std::chrono::system_clock::now().time_since_epoch().count();
+// 	seeds[i]= i;
     }
 }
 
