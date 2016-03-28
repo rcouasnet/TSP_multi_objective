@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   
   InstanceTsp *tsp = new InstanceTsp(File_A, File_B);
   tsp->initSeeds();
-  tsp->initBothCostMatrices();
+  tsp->setBothCostMatrices();
   
   //tsp->offlineFilter();
   tsp->onlineFilter();
@@ -86,3 +86,4 @@ int main(int argc, char **argv) {
   
   return 0;
 }
+

@@ -16,8 +16,13 @@ InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
   obj1 = new Objective();
   obj2 = new Objective();
 
-  obj1->tryLoadFile(fobj1);
-  obj2->tryLoadFile(fobj2);
+  if (obj1->tryLoadFile(fobj1) &&  obj2->tryLoadFile(fobj2) ){
+      cout << "Fichiers de l'instance correctement ouverts"<< endl;
+  }
+  else {
+      cerr<< "Impossible d'ouvrir les fichiers de l'instance"<< endl;
+      exit(EXIT_FAILURE);
+  }
   
   ostringstream oss;
   oss<< "_" << instance_name << obj1->get_nbcities(); 
@@ -26,16 +31,15 @@ InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
 
 void InstanceTsp::initSeeds()
 {
-    // obtain a time-based seed:
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    seeds[0]= seed;
+    // Graine aléatoire random (on pourrait mettre i pour avoir tout le temps les même solutions)
     
-    for(unsigned i = 1; i < NB_SEEDS; ++i){ 
-	seeds[i] = i;
+    for(unsigned i = 0; i < NB_SEEDS; ++i){ 
+	seeds[i]= std::chrono::system_clock::now().time_since_epoch().count();
+// 	seeds[i]= i;
     }
 }
 
-void InstanceTsp::initBothCostMatrices()
+void InstanceTsp::setBothCostMatrices()
 {
     // Initialisation des matrices de distance
     obj1->setMatriceDistance();
@@ -58,14 +62,31 @@ void InstanceTsp::initPath()
  
 void InstanceTsp::generatePath(unsigned seed_num)
 {
-    initPath();
+        // Les instances doivent avoir le même nombre de villes
+    
+    // On initialise le chemin : la position dans le chemin est identique
+    //	à la position dans l'instance pour l'instant
+    path.resize(obj1->get_nbcities() +1);
+    
+    path[0]= -1;
+    for(unsigned i = 1; i <= obj1->get_nbcities(); ++i){
+        path[i]= i;
+    }
     
     assert(seed_num < NB_SEEDS);
     
     // On mélange l'ordre du chemin avec un graine déjà crée
     // On ne doit pas mélanger la première case avec les autres ! d'où le ++
     shuffle(++(path.begin()),path.end(),std::default_random_engine(seeds[seed_num]));
-    
+
+#if DEBUG_PATH
+    for(unsigned i= 1; i <= obj1->get_nbcities(); ++i) 
+    {
+	clog << "path["<< i <<"] : "<< path[i] << endl;
+	assert(path[i]!= -1);
+    }
+    clog << endl;
+#endif
     assert(path[0] == -1);
 }
 
@@ -79,6 +100,15 @@ void InstanceTsp::generatePath()
     // On mélange l'ordre du chemin
     // On ne doit pas mélanger la première case avec les autres ! d'où le ++
     shuffle(++(path.begin()),path.end(),std::default_random_engine(random_seed));
+
+#if DEBUG_PATH
+    for(unsigned i= 1; i <= obj1->get_nbcities(); ++i) 
+    {
+	clog << "path["<< i <<"] : "<< path[i] << endl;
+	assert(path[i]!= -1);
+    }
+    clog << endl;
+#endif
     
     assert(path[0] == -1);
 }
@@ -315,7 +345,7 @@ void InstanceTsp::onlineFilter()
 
             // Sauvegarde de la solution courante dans le fichier
             file << total_cost_1<< " " << total_cost_2<< endl;
-// 	    TODO Changer : mettre l'évaluation courante dans la classe
+
 	    tsp_evaluation= new Evaluation(total_cost_1, total_cost_2);
 	    
 	    cout << "Eval tsp : "<< tsp_evaluation->get_val1()<< " ; "<< tsp_evaluation->get_val2()<< endl;
@@ -362,7 +392,7 @@ void InstanceTsp::onlineFilter()
 		    "ajout dans les non dominées"<< endl<< endl;
 		#endif
 	    }
-	    else { delete tsp_evaluation; }
+// 	    else { delete tsp_evaluation; }
         }
 
         // Enregistrement du front Pareto dans un fichier
@@ -409,8 +439,7 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
     {
 	unsigned nb_evaluation = 0;	
 	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
-	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
-	not_determined.clear();
+	not_determined.clear(); // @SEE remplacé .empty() par .clear()
 	
 	active->generatePath();
 	active->initEvaluation();

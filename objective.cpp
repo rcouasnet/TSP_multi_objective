@@ -92,6 +92,8 @@ float Objective::get_distance(double ind_A, double ind_B) const
 {
     #if DEBUG_MAT_DIST
 	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
+	assert(ind_A > 0 && ind_A <= nb_cities);
+	assert(ind_B > 0 && ind_B <= nb_cities);
     #endif
     return cost_matrice[ind_A][ind_B];
 }

@@ -8,7 +8,8 @@
 #include <sstream>
 #include <algorithm>
 #include <assert.h>
- #include <ctime>
+// #include <ctime>
+#include <random>
 #include <chrono>
 #include <list>
 
@@ -43,9 +44,9 @@ public:
      */
     void initSeeds();
     /**
-     * Initialise les 2 matrices de distance @SEE ce n'est pas fait dans tryLoadFile ???
+     * Initialise les 2 matrices de distance
      */
-    void initBothCostMatrices();
+    void setBothCostMatrices();
         
 private:
     /**
