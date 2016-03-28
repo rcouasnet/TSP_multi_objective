@@ -427,10 +427,10 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
     InstanceTsp neighboor(getFile1(), getFile2());
 
     // Calcul de l'ensemble des permutations possibles pour une instance	
-    vector<Coordinates> permut;
+    vector< Evaluation * > permut;
     for(unsigned i=0; i < active->getFirstObjective()->get_nbcities(); ++i){
 	for(unsigned j= i; j < active->getSecondObjective()->get_nbcities(); ++j){
-	    permut.push_back(*(new Coordinates(i, j)));
+	    permut.push_back((new Evaluation(i, j)));
 	}
     }
     
@@ -455,7 +455,7 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	    for(int k = 0; k < (int)permut.size(); ++k)
 	    {
 		neighboor = *active;
-		neighboor.Permutation(permut.at(k).getCol(), permut.at(k).getRow());
+		neighboor.Permutation(permut[k]->get_val1(), permut[k]->get_val2());
 		neighboor.initEvaluation();
 		
 		unsigned t = 0;
