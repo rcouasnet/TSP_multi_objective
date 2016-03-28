@@ -406,11 +406,11 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
     }
     
     // On effectue le nombre d'itérations demandés
-    for(unsigned i = 0 ; i < nb_iteration ; ++ i)
+    for(unsigned i = 0 ; i < nb_iteration ; ++i)
     {
 	unsigned nb_evaluation = 0;	
 	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
-// 	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
+	not_determined.empty(); // TODO corriger, ceci renvoie seulement vrai si le vecteur est vide
 	not_determined.clear();
 	
 	active->generatePath();
@@ -420,7 +420,7 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	unsigned num_instance = 0;
 	
 	while(num_instance < not_determined.size() )
-	{  
+	{
 	    *active = not_determined[num_instance];	
 	    active->initEvaluation();
 	    
@@ -438,18 +438,18 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 		    ++nb_evaluation;
 		    not_determined[t].initEvaluation();
 		    
-		    if(neighboor.get_total_cost1() > not_determined[t].get_total_cost1() && neighboor.get_total_cost2() > not_determined[t].get_total_cost2())
+		    if((neighboor.get_total_cost1() > not_determined[t].get_total_cost1()) && (neighboor.get_total_cost2() > not_determined[t].get_total_cost2()))
 		    {
 			deter = true;
 		    }
-		    else if(neighboor.get_total_cost1() < not_determined[t].get_total_cost1() && neighboor.get_total_cost2() < not_determined[t].get_total_cost2())
+		    else if((neighboor.get_total_cost1() < not_determined[t].get_total_cost1()) && (neighboor.get_total_cost2() < not_determined[t].get_total_cost2()))
 		    { 
 			  not_determined.at(t) = neighboor;
 			  // Propagation
 			  vector<int> toDelete;
 			  for(unsigned ind = t+1 ; ind < not_determined.size(); ++ind){
 			    
-			      if(neighboor.get_total_cost2() <  not_determined[ind].get_total_cost1() && neighboor.get_total_cost2() < not_determined[ind].get_total_cost2()){
+			      if((neighboor.get_total_cost2() <  not_determined[ind].get_total_cost1()) && (neighboor.get_total_cost2() < not_determined[ind].get_total_cost2())){
 				  toDelete.push_back(ind);
 			      }
 			  }
@@ -471,8 +471,8 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	    }
 	    
 	    ++num_instance;
-	}
-	
+	}	
+
 	chrono::high_resolution_clock::time_point fin = chrono::high_resolution_clock::now();	// Timer fin
 	long duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
 
