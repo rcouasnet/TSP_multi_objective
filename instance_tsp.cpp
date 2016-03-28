@@ -54,10 +54,10 @@ void InstanceTsp::initPath()
     //	à la position dans l'instance pour l'instant
     path.resize(obj1->get_nbcities() +1);
     
-    path[0]= -1;
     for(unsigned i = 1; i <= obj1->get_nbcities(); ++i){
         path[i]= i;
     }
+    path[0]= path[1];
 }
  
 void InstanceTsp::generatePath(unsigned seed_num)
@@ -83,11 +83,11 @@ void InstanceTsp::generatePath(unsigned seed_num)
     for(unsigned i= 1; i <= obj1->get_nbcities(); ++i) 
     {
 	clog << "path["<< i <<"] : "<< path[i] << endl;
-	assert(path[i]!= -1);
+	assert(path[i]!= 0);
     }
     clog << endl;
 #endif
-    assert(path[0] == -1);
+//     assert(path[0] == -1);
 }
 
 void InstanceTsp::generatePath()
@@ -105,12 +105,12 @@ void InstanceTsp::generatePath()
     for(unsigned i= 1; i <= obj1->get_nbcities(); ++i) 
     {
 	clog << "path["<< i <<"] : "<< path[i] << endl;
-	assert(path[i]!= -1);
+	assert(path[i]!= 0);
     }
     clog << endl;
 #endif
     
-    assert(path[0] == -1);
+//     assert(path[0] == -1);
 }
 
 void InstanceTsp::initEvaluation()
