@@ -19,9 +19,8 @@ InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
   obj1->tryLoadFile(fobj1);
   obj2->tryLoadFile(fobj2);
   
-  // @SEE est-ce qu'on laisse kroAB de base ?
   ostringstream oss;
-  oss<< "_kroAB"<< obj1->get_nbcities(); 
+  oss<< "_" << instance_name << obj1->get_nbcities(); 
   instance_name= oss.str();
 }
 
@@ -281,7 +280,7 @@ int InstanceTsp::spread(vector< Evaluation* >& not_dominated, Evaluation* eval, 
     #if DEBUG_ONLINE
 	cout << "Propagation de la solution dominante"<< endl;
     #endif
-    for(unsigned j = not_dominated.size() -1 ; j > ind_begin; ++j)
+    for(unsigned j = not_dominated.size() -1 ; j > ind_begin; --j)
     {
 	if( not_dominated[j]->is_dominated(*eval) ) {
 	    ++nb_deleted;
@@ -456,23 +455,17 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 			  for(unsigned del = 0; del < toDelete.size(); ++del){
 			      not_determined.erase(not_determined.begin()+toDelete[del]-del);
 			  }
-
 			  deter = true; 		  
 		    }else{
 			++t;		  
 		    }	      
-		
 		}
-		
 		if(deter == false){
 		    not_determined.push_back(neighboor);
 		}
-	  
 	    }
-	    
 	    ++num_instance;
 	}	
-
 	chrono::high_resolution_clock::time_point fin = chrono::high_resolution_clock::now();	// Timer fin
 	long duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
 

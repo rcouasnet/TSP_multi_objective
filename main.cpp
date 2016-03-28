@@ -80,9 +80,9 @@ int main(int argc, char **argv) {
   tsp->initBothCostMatrices();
   
   //tsp->offlineFilter();
-  //tsp->onlineFilter();
+  tsp->onlineFilter();
     
- tsp->mTSP(100);
+ //tsp->mTSP(100);
   
   return 0;
 }
