@@ -88,18 +88,18 @@ void Objective::setMatriceDistance()
     #endif
 }
 
-float Objective::get_distance(int ind_A, int ind_B) const
+float Objective::get_distance(unsigned int ind_A, unsigned int ind_B) const
 {
     #if DEBUG_MAT_DIST
 	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
+	cout << "taille mat distance : "<< cost_matrice.size() << " sur "<< cost_matrice[1].size()<< endl;
+	
 	assert(ind_A > 0 && ind_A <= nb_cities
 	    && "Problème  : on essaie d'atteindre une cellule en dehors du vecteur de distance !"
 	);
 	assert(ind_B > 0 && ind_B <= nb_cities
 	    && "Problème  : on essaie d'atteindre une cellule en dehors du vecteur de distance !"
 	);
-	
-	cout << "taille mat distance : "<< cost_matrice.size() << " sur "<< cost_matrice[1].size()<< endl;
     #endif
 	
     return cost_matrice[ind_A][ind_B];

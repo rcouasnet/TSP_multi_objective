@@ -78,7 +78,7 @@ public:
      * @param A première ville
      * @param B seconde ville
      */
-    float get_distance(int ind_A, int ind_B) const; 
+    float get_distance(unsigned ind_A, unsigned ind_B) const; 
 };
 
 std::vector<std::string>& explode(const std::string &str);

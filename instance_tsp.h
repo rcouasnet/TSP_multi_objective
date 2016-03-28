@@ -31,7 +31,7 @@ private:
     std::string instance_name;
     double total_cost_1, total_cost_2;
     
-    std::vector<int> path;
+    std::vector<unsigned> path;
     
     unsigned seeds[NB_SEEDS];
     
@@ -67,7 +67,6 @@ private:
     void generatePath();
     /**
      * Calcule le cout total de chaque objectif
-     * @SEE voir si le calcul des matrices de distance se fait en dehors de la méthode
      */
     void initEvaluation();
     
