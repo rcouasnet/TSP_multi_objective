@@ -326,7 +326,7 @@ void InstanceTsp::onlineFilter()
 }
 
 
-void InstanceTsp::mSTP(unsigned nb_iteration)
+void InstanceTsp::mTSP(unsigned nb_iteration)
 {    
     vector<InstanceTsp> not_determined;
     InstanceTsp *active = new InstanceTsp(getFile1(), getFile2());

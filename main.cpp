@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
   
   std::cout << tsp->getInstanceName() << std::endl;  
   
- tsp->mSTP(50);
+ tsp->mTSP(50);
   
   return 0;
 }
