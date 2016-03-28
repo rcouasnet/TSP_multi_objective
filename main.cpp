@@ -27,7 +27,11 @@ int main(int argc, char **argv) {
   tsp->initSeeds();
   tsp->initBothCostMatrices();
   
-  tsp->offlineFilter();
+//  tsp->offlineFilter();
+  tsp->onlineFilter();
+
+  
+  std::cout << tsp->getInstanceName() << std::endl;  
   
 //   tsp->trySaveParetoToTxt(not_dominated"../data/results/nomfic_test_pareto.txt");
   

@@ -24,7 +24,7 @@ class InstanceTsp
 {
 private:
     Objective *obj1, *obj2;
-    std::string file_i1, file_i2;
+    std::string file_i1, file_i2, instanceName;
     double total_cost_1, total_cost_2;
     
     std::vector<int> path;
@@ -45,6 +45,7 @@ public:
      * Initialise les 2 matrices de distance @SEE ce n'est pas fait dans tryLoadFile ???
      */
     void initBothCostMatrices();
+    
 private:
     /**
      * Crée un parcours aléatoire à partir d'une graine aléatoire
@@ -62,6 +63,7 @@ public:
     /*** Getters ***/
     double get_total_cost1(){	return total_cost_1;  }
     double get_total_cost2(){	return total_cost_2;  }
+    std::string getInstanceName(){	return instanceName;  }
     /** Setters ***/
     void set_total_cost1(double cost){	total_cost_1 = cost;  }
     void set_total_cost2(double cost){	total_cost_2 = cost;  }
@@ -73,6 +75,18 @@ public:
      */
     bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string& fileName) const;
     
+     /**
+     * Découpe la chaîne du chemin du fichier pour retourner le nom du fichier seulement
+     * @param str : chemin du fichier
+     * @return nom du fichier 
+     */
+    std::string splitFileName(const std::string &str);
+    
+    std::string formInstanceName(const std::string &File_A, const std::string &File_B);
+    
+     /**
+     * 
+     */
     void offlineFilter();
     
     /**

@@ -4,8 +4,11 @@
 using namespace std;
 
 InstanceTsp::InstanceTsp(const std::string& fobj1, const std::string& fobj2) :
-    total_cost_1(-1), total_cost_2(-1)
+   file_i1(fobj1), file_i2(fobj2), total_cost_1(-1), total_cost_2(-1)
 {
+  
+  instanceName = formInstanceName(file_i1, file_i2);
+  
   obj1 = new Objective();
   obj2 = new Objective();
 
@@ -81,7 +84,7 @@ bool InstanceTsp::trySaveParetoToTxt(vector< Evaluation*>& notDominated, const s
     ofstream file(fileName);
 
     if(!file.is_open()){
-        cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
+        cerr << "Erreur pendant l'ouverture du fichier d'enregistrement Pareto500" << endl;
         return false;
     }else{
         for(const Evaluation* eval : notDominated){
@@ -91,76 +94,94 @@ bool InstanceTsp::trySaveParetoToTxt(vector< Evaluation*>& notDominated, const s
     return true;
 }
 
+string InstanceTsp::splitFileName(const string &str)
+{
+    size_t f = str.find_last_of("/\\");
+    string s = str.substr(f+1);
+    string fileName = s.substr(0,s.size()-4);
+
+    return fileName;
+}
+
+string InstanceTsp::formInstanceName(const string& File_A, const string& File_B)
+{
+     string fileName_A = splitFileName(File_A);
+     string fileName_B = splitFileName(File_B);
+     string instanceName = fileName_A.substr(0,4)+fileName_B.substr(3,1)+
+                        fileName_A.substr(4,fileName_A.size()-4);
+     return instanceName;
+}
 
 
 void InstanceTsp::offlineFilter()
 {
     double result[500][2] = { { 0 } };
-
-    for(unsigned i= 0; i < 500; ++i) {
-        generatePath(i);
-	initEvaluation();
-	result[i][0] = total_cost_1;
-	result[i][1] = total_cost_2;
-    }
-
-    vector<Evaluation*> not_dominated;
-    not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
-
-    for(int k = 1; k < 500 ; ++k){
-        unsigned num_eval = 0;
-        bool determined = false;
-
-        while(num_eval < not_dominated.size() && !determined){
-	    Evaluation* current_eval= not_dominated[num_eval];
-	    
-            if( result[k][0] > current_eval->get_val1() 
-		    && result[k][1] >current_eval->get_val2() ) {
-
-                determined = true;
-
-            }else if( result[k][0] < current_eval->get_val1()
-			&& result[k][1] < current_eval->get_val2() ){
-                current_eval->set_obj1(result[k][0]);
-                current_eval->set_obj2(result[k][1]);
-
-                vector<int> toDelete;
-                for(unsigned j= not_dominated.size() -1 ; j > num_eval+1; ++j){
-                    if( result[k][0] <  current_eval->get_val1()
-			    && result[k][1] < current_eval->get_val2() ){
-			not_dominated.erase(not_dominated.begin() + j);
-                    }
-                }
-                
-                determined = true;
-
-            }else{
-                ++num_eval;
-            }
-        }
-
-        if(determined == false){
-            not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
-        }
-    }
     
-    
-    //offline500
-     string instName =   "../data/results/offline500_test.txt";
-     ofstream file1(instName);
+    string offline_name = "../data/results/offline/offline500_"+getInstanceName()+".txt";
+    ofstream file(offline_name);
  
-     if(!file1){
-         cerr << "Erreur pendant l'ouverture du fichier d'enregistrement" << endl;
+     if(!file){
+         cerr << "Erreur de création du fichier d'enregistrement" << endl;
      }
      else{
-         for(int i=0 ; i < 500 ; ++i){
+       for(unsigned i= 0; i < 500; ++i) {
+	  generatePath(i);
+	  // Evaluation du chemin
+	  initEvaluation();
+	  result[i][0] = total_cost_1;
+	  result[i][1] = total_cost_2;
+      }
+
+      // Ajout de la solution courante dans le vecteur
+      vector<Evaluation*> not_dominated;
+      not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
+
+      for(int k = 1; k < 500 ; ++k){
+	  unsigned num_eval = 0;
+	  bool determined = false;
+
+	  while(num_eval < not_dominated.size() && !determined){
+	      Evaluation* current_eval= not_dominated.at(num_eval);
+	      
+	      if( result[k][0] > current_eval->get_val1() 
+		      && result[k][1] >current_eval->get_val2() ) {
+
+		  determined = true;
+	      
+	      }else if( result[k][0] < current_eval->get_val1()
+			  && result[k][1] < current_eval->get_val2() ){
+		  current_eval->set_obj1(result[k][0]);
+		  current_eval->set_obj2(result[k][1]);
+                  // Propagation
+		  vector<int> toDelete;
+		  for(unsigned j = num_eval + 1 ; j < not_dominated.size(); ++j) {
+		      if( result[k][0] <  current_eval->get_val1()
+			      && result[k][1] < current_eval->get_val2() ){
+			  not_dominated.erase(not_dominated.begin() + j);
+		      }
+		  }
+		  
+		  determined = true;
+
+	      }else{
+		  ++num_eval;
+	      }
+	  }
+
+	  if(determined == false){
+	      not_dominated.push_back(new Evaluation(result[0][0], result[0][1]));
+	  }
+      }
+      
+      for(int i=0 ; i < 500 ; ++i){
+	  file << result[i][0] << " " << result[i][1] << endl;
+      }
+
  
-            file1 << result[i][0] << " " << result[i][1] << endl;
-         }
-     }
- 
-     //offline500 Pareto
-     trySaveParetoToTxt(not_dominated, "../data/results/offline500_Pareto_test.txt");
+     //Sauvegarde de OfflinePareto500 dans le fichier d'enregistrement
+     string paretoFileName = "../data/results/offline/offlinePareto500_"+getInstanceName()+".txt";
+     trySaveParetoToTxt(not_dominated, paretoFileName);
+  }
 }
 
 
@@ -181,28 +202,27 @@ void InstanceTsp::spread(vector< Evaluation* >& not_dominated, Evaluation* eval,
 void InstanceTsp::onlineFilter()
 {
     vector< Evaluation* > not_dominated;
-    string instanceName= "TEMPORAIRE"; // TODO mettre dans la classe
-
-    string online_name =   "results/online/online500_"+instanceName+".txt";
+    
+    string online_name =   "../data/results/online/online500_"+getInstanceName()+".txt";
     ofstream file(online_name);
 
     if(!file){
-        cerr << "Erreur de création du fichier" << endl;
+        cerr << "Erreur de création du fichier d'enregistrement" << endl;
     }
     else{
 	// Test des 500 solutions
         for(unsigned num_eval= 0; num_eval < 500 ; ++num_eval){
 	    
             generatePath(num_eval);
-            // Evaluating the path
+            // Evaluation du chemin
             initEvaluation();
 
-            // Writing current solution in file online500 ...
+            // Sauvegarde de la solution courante
             file << total_cost_1<< " " << total_cost_2<< endl;
 // 	    TODO Changer : mettre l'évaluation courante dans la classe
-	    Evaluation* tsp_evalulation= new Evaluation(total_cost_1, total_cost_2);
+	    Evaluation* tsp_evaluation = new Evaluation(total_cost_1, total_cost_2);
 
-            // Testing the path with all the non-dominated ones
+            // Test du chemin avec tous les non-dominés
             unsigned indice = 0;
             bool is_dominating= false;
 
@@ -210,16 +230,16 @@ void InstanceTsp::onlineFilter()
 		Evaluation* current_eval= not_dominated[num_eval];
 		
 		// On vérifie que la solution n'est pas dominée
-                if( tsp_evalulation->is_dominated(*current_eval) ){
+                if( tsp_evaluation->is_dominated(*current_eval) ){
                     is_dominating= true;
                 }
                 // Sinon, on regarde si elle domine
-                else if( current_eval->is_dominated(*tsp_evalulation) ){
+                else if( current_eval->is_dominated(*tsp_evaluation) ){
                     current_eval->set_obj1(total_cost_1);
                     current_eval->set_obj2(total_cost_2);
 		    
 		    // Propagation
-		    spread(not_dominated, tsp_evalulation, indice);
+		    spread(not_dominated, tsp_evaluation, indice);
 
                     is_dominating= true;
                 }
@@ -229,25 +249,16 @@ void InstanceTsp::onlineFilter()
             }
 
             if(!is_dominating){
-                not_dominated.push_back(tsp_evalulation);
+                not_dominated.push_back(tsp_evaluation);
             }
             else {
-		delete &tsp_evalulation;
+		delete &tsp_evaluation;
             }
         }
 
-        // Writing Pareto local front in onlinePareto500_instanceName.txt
-        string paretoFileName = "results/online/onlinePareto500_"+instanceName+".txt";
-
-        ofstream fileP(paretoFileName);
-
-        if(!fileP){
-            cerr << "Erreur de création de fichier" << endl;
-        }else{
-            for(unsigned i=0; i < not_dominated.size(); ++i){
-                fileP << not_dominated[i]->get_val1() << " " << not_dominated[i]->get_val2() << endl;
-            }
-        }
+	//Sauvegarde de OnlinePareto500 dans le fichier d'enregistrement
+        string paretoFileName = "../data/results/online/onlinePareto500_"+getInstanceName()+".txt";
+	trySaveParetoToTxt(not_dominated, paretoFileName);
     }
 }
 
