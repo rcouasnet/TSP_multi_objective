@@ -8,34 +8,18 @@ using namespace std;
 void launch_menu(int argc, char** argv)
 {
 //     /* MAIN FONCTIONNEL MAIS PAS PRATIQUE POUR TEST
- 
-  Objective i1, i2;
-  
-  if (argc != 3 )
-      cerr << "Veuillez lancer le programme avec 2 paramètres : les deux noms de fichiers de l'instance"<< endl;
-  else {
-    std::string File_A(argv[1]);
-    std::string File_B(argv[2]);
-    
-    if (i1.tryLoadFile(File_A)){
-    #if DEBUG_CREATION
-	clog << "lecture réussie : " << i1 << endl;
-    #endif
-    }
-    
-    if (i2.tryLoadFile(File_B)){
-    #if DEBUG_CREATION
-	clog << "lecture réussie : " << i2 << endl;
-    #endif
-    }
-    
-    InstanceTsp *tsp = new InstanceTsp(File_A, File_B);
-    tsp->initSeeds();
-    tsp->setBothCostMatrices();
-    
+
     if(argc != 3) {
 	std::cerr << " arg[0] = nom du programme, arg[1] = fichier A, arg[2] = fichier B." << std::endl;
     } else {
+	 
+	std::string File_A(argv[1]);
+	std::string File_B(argv[2]);
+	
+	InstanceTsp *tsp = new InstanceTsp(File_A, File_B);
+	tsp->initSeeds();
+	tsp->setBothCostMatrices();
+	
 	int choix = 0;
 	cout << "Que voulez-vous faire ?" << endl;
 	cout << "1 - Filtre Offline" << endl;
@@ -59,7 +43,6 @@ void launch_menu(int argc, char** argv)
 	}
     }
     
-  }
 //   */
 }
 
