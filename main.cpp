@@ -27,12 +27,12 @@ int main(int argc, char **argv) {
   tsp->initSeeds();
   tsp->initBothCostMatrices();
   
- tsp->offlineFilter();
-//   tsp->onlineFilter();
+ // tsp->offlineFilter();
+  //tsp->onlineFilter();
   
   std::cout << tsp->getInstanceName() << std::endl;  
   
-  tsp->mSTP(1);
+ tsp->mSTP(50);
   
   return 0;
 }

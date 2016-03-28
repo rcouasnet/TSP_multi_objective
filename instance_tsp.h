@@ -18,7 +18,7 @@
 #include "evaluation.h"
 #include "coordinates.h"
 
-#define NB_SEEDS	50
+#define NB_SEEDS	500
 
 class InstanceTsp
 {
@@ -46,9 +46,7 @@ public:
      * Initialise les 2 matrices de distance @SEE ce n'est pas fait dans tryLoadFile ???
      */
     void initBothCostMatrices();
-    
-    void mSTP(unsigned nb_iteration);
-    
+        
 private:
     /**
      * Crée un parcours aléatoire à partir d'une graine aléatoire
@@ -103,12 +101,17 @@ public:
      */
     std::string splitFileName(const std::string &str);
     
+     /**
+     * Créer le nom de l'instance résultat pour la création du fichier d'enregistrement
+     * @param str : chemin du fichier
+     * @return nom du fichier 
+     */
     std::string formInstanceName(const std::string &File_A, const std::string &File_B);
     
     void Permutation(Coordinates p);
     
      /**
-     * 
+     * Filtre offline
      */
     void offlineFilter();
     
@@ -121,10 +124,13 @@ public:
      */
     int spread(std::vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned int ind_begin);
     /**
-     * 
+     * Filtre online
      */
     void onlineFilter();
     
+     /**
+     * Algorithme mTSP
+     */
     void mTSP(unsigned nb_iteration);
   
 };

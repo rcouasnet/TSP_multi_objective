@@ -56,7 +56,7 @@ void InstanceTsp::generatePath(unsigned seed_num)
         path[i]= i;
     }
     
-    assert(seed_num < NB_SEEDS);
+   assert(seed_num < NB_SEEDS);
     
     // On mélange l'ordre du chemin
     // On ne doit pas mélanger la première case avec les autres ! d'où le ++
