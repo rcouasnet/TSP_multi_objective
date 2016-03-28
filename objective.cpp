@@ -92,8 +92,12 @@ float Objective::get_distance(int ind_A, int ind_B) const
 {
     #if DEBUG_MAT_DIST
 	cout << "récupération de la distance entre "<< ind_A<< " et "<< ind_B<< endl;
-	assert(ind_A > 0 && ind_A <= nb_cities);
-	assert(ind_B > 0 && ind_B <= nb_cities);
+	assert(ind_A > 0 && ind_A <= nb_cities
+	    && "Problème  : on essaie d'atteindre une cellule en dehors du vecteur de distance !"
+	);
+	assert(ind_B > 0 && ind_B <= nb_cities
+	    && "Problème  : on essaie d'atteindre une cellule en dehors du vecteur de distance !"
+	);
 	
 	cout << "taille mat distance : "<< cost_matrice.size() << " sur "<< cost_matrice[1].size()<< endl;
     #endif
