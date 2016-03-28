@@ -18,13 +18,13 @@
 #include "evaluation.h"
 #include "coordinates.h"
 
-#define NB_SEEDS	500
+#define NB_SEEDS	50
 
 class InstanceTsp
 {
 private:
     Objective *obj1, *obj2;
-    std::string file_i1, file_i2;
+    std::string instance_name;
     double total_cost_1, total_cost_2;
     
     std::vector<int> path;
@@ -66,13 +66,27 @@ public:
     void set_total_cost1(double cost){	total_cost_1 = cost;  }
     void set_total_cost2(double cost){	total_cost_2 = cost;  }
     
+    
+    /**
+     * Sauvegarde du front Pareto offline
+     * @return false si le fichier ne peut pas être crée
+     */
+    bool trySaveOfflineParetoToTxt(std::vector< Evaluation* >& notDominated) const;
+    
+    /**
+     * Sauvegarde du front Pareto
+     * @return false si le fichier ne peut pas être crée
+     */
+    bool trySaveOnlineParetoToTxt(std::vector< Evaluation* >& notDominated) const;
+private:
     /**
      * Sauvegarde du front Pareto
      * @param fileName : chemin du fichier
      * @return false si le fichier ne peut pas être crée
      */
-    bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string& fileName) const;
+    bool trySaveParetoToTxt(std::vector< Evaluation* >& notDominated, const std::string fileName) const;
     
+public:
     void offlineFilter();
     
     /**
