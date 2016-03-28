@@ -460,6 +460,7 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 		
 		unsigned t = 0;
 		bool deter = false;
+		/*** TODO TOUTE CETTE PARTIE EST A REVOIR ***/
 		
 		while( t < not_determined.size() && deter == false)
 		{
