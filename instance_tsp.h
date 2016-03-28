@@ -123,7 +123,7 @@ public:
      */
     std::string formInstanceName(const std::string &File_A, const std::string &File_B);
     
-    void Permutation(Coordinates p);
+    void Permutation(int p1, int p2);
     
 /*** Filtrages ***/
      /**

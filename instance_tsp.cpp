@@ -219,11 +219,11 @@ string InstanceTsp::formInstanceName(const string& File_A, const string& File_B)
      return instanceName;
 }
 
-void InstanceTsp::Permutation(Coordinates p){
-
-  int aux = path.at(p.getCol());
-  path.at(p.getCol()) = path.at(p.getRow());
-  path.at(p.getRow()) = aux;
+void InstanceTsp::Permutation(int p1, int p2)
+{
+  int aux = path.at(p1);
+  path.at(p1) = path.at(p2);
+  path.at(p2) = aux;
 }
 
 void InstanceTsp::offlineFilter()
@@ -436,12 +436,11 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
     }
     
     // On effectue le nombre d'itérations demandés
-    for(unsigned i = 0 ; i < nb_iteration ; ++ i)
+    for(unsigned i = 0 ; i < nb_iteration ; ++i)
     {
 	unsigned nb_evaluation = 0;	
 	chrono::high_resolution_clock::time_point debut = chrono::high_resolution_clock::now();	// Timer start
-// 	not_determined.empty();
-	not_determined.clear();
+	not_determined.clear(); // @SEE remplacé .empty() par .clear()
 	
 	active->generatePath();
 	active->initEvaluation();
@@ -450,14 +449,14 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	unsigned num_instance = 0;
 	
 	while(num_instance < not_determined.size() )
-	{  
+	{
 	    *active = not_determined[num_instance];	
 	    active->initEvaluation();
 	    
 	    for(int k = 0; k < (int)permut.size(); ++k)
 	    {
 		neighboor = *active;
-		neighboor.Permutation(permut.at(k));
+		neighboor.Permutation(permut.at(k).getCol(), permut.at(k).getRow());
 		neighboor.initEvaluation();
 		
 		unsigned t = 0;
@@ -468,18 +467,18 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 		    ++nb_evaluation;
 		    not_determined[t].initEvaluation();
 		    
-		    if(neighboor.get_total_cost1() > not_determined[t].get_total_cost1() && neighboor.get_total_cost2() > not_determined[t].get_total_cost2())
+		    if((neighboor.get_total_cost1() > not_determined[t].get_total_cost1()) && (neighboor.get_total_cost2() > not_determined[t].get_total_cost2()))
 		    {
 			deter = true;
 		    }
-		    else if(neighboor.get_total_cost1() < not_determined[t].get_total_cost1() && neighboor.get_total_cost2() < not_determined[t].get_total_cost2())
+		    else if((neighboor.get_total_cost1() < not_determined[t].get_total_cost1()) && (neighboor.get_total_cost2() < not_determined[t].get_total_cost2()))
 		    { 
 			  not_determined.at(t) = neighboor;
 			  // Propagation
 			  vector<int> toDelete;
 			  for(unsigned ind = t+1 ; ind < not_determined.size(); ++ind){
 			    
-			      if(neighboor.get_total_cost2() <  not_determined[ind].get_total_cost1() && neighboor.get_total_cost2() < not_determined[ind].get_total_cost2()){
+			      if((neighboor.get_total_cost2() <  not_determined[ind].get_total_cost1()) && (neighboor.get_total_cost2() < not_determined[ind].get_total_cost2())){
 				  toDelete.push_back(ind);
 			      }
 			  }
@@ -501,8 +500,8 @@ void InstanceTsp::mTSP(unsigned nb_iteration)
 	    }
 	    
 	    ++num_instance;
-	}
-	
+	}	
+
 	chrono::high_resolution_clock::time_point fin = chrono::high_resolution_clock::now();	// Timer fin
 	long duration = chrono::duration_cast<chrono::microseconds>(fin - debut).count();
 
