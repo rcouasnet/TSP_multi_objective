@@ -119,11 +119,13 @@ public:
      * @param eval évaluation qui domine peut être les autres
      * @param ind_begin emplacement du vecteur à partir duquel effectuer la propagation
      */
-    static void spread(std::vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned ind_begin);
+    int spread(std::vector< Evaluation* >& not_dominated, Evaluation* eval, unsigned int ind_begin);
     /**
      * 
      */
     void onlineFilter();
+    
+    void mTSP(unsigned nb_iteration);
   
 };
 

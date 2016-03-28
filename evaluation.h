@@ -4,13 +4,14 @@
 class Evaluation
 {
 private:
-    double val_obj1, val_obj2;
+    double val_obj1;
+    double val_obj2;
     
 public:
     Evaluation(double _val_obj1, double _val_obj2) :
 	val_obj1(_val_obj1), val_obj2(_val_obj2) {};
 	
-    double get_val1() const { return val_obj1 ;}
+    double get_val1() const {  return val_obj1 ;}
     double get_val2() const { return val_obj2 ;}
     
     /**
