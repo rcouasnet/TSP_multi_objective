@@ -1,5 +1,5 @@
 # Projet Optimisation : TSP Multi-objectif
-	Par COUASNET Robin et DAVID Florian
+## Par COUASNET Robin @rcouasnet et DAVID Florian @flodavid
 
 
 ## Compilation : Utiliser le CMakeLists.txt
@@ -11,10 +11,9 @@ Pour obtenir des traces, on peut aller dans le fichier debug.h et mettre les def
 
 
 ## Pour lancer le programme :
-	dossier build
-./tsp_multi-objectif  <fichier1> <fichier2>
+Depuis le dossier build : ``` ./tsp_multi-objectif  <fichier1> <fichier2> ``` 
 
-"./tsp_multi-objectif  ../data/kroA100.tsp ../data/kroB100.tsp " par exemple
+	"./tsp_multi-objectif  ../data/kroA100.tsp ../data/kroB100.tsp " par exemple
 
 On choisi ensuite quelle algorithme on veut tester
 
@@ -39,5 +38,3 @@ Puis, dans le terminal :
 
 ## Remarques :
 le Offline et Online marchent, par contre mTSP avec PLS doit être mal implémenter car il est beaucoup trop long pour effectuer une seule itération
-
-Veuillez nous excuser pour le retard, nous avons justement eu des problèmes avec le mTSP.
